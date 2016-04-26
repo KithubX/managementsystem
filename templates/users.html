@@ -1,0 +1,35 @@
+<div class="col-md-12">
+	<cc-spinner is-loading="UsersService.isLoading" message="Loading"></cc-spinner>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="text-center">Name</th>
+				<th class="text-center">Lastname</th>
+				<th class="text-center">User</th>
+				<th class="text-center">Rol</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-center" ng-repeat="user in UsersService.users" ng-click="SelectUser(user)" ng-class="{'selected':user.id == UsersService.selectedUser.id}">
+				<td>{{user.nb_fname}}</td>
+				<td>{{user.nb_lname}}</td>
+				<td>{{user.nb_user}}</td>
+				<td>{{user.nb_rol}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="col-md-12">
+		<div class="col-md-5 buttons">
+			<div class="col-md-3 BtnContent">
+				<button class="btn btn-success" ng-click="RedirectAdd()">Agregar</button>
+			</div>
+			<div class="col-md-3 BtnContent">
+				<button class="btn btn-warning">Editar</button>
+			</div>
+			<div class="col-md-3 BtnContent">
+				<button class="btn btn-danger">Danger</button>
+			</div>
+		</div>
+	</div>
+</div>
