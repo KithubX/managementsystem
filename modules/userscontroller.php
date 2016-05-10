@@ -1,11 +1,15 @@
 <?php 
 	session_start();
-	include("libs.php");
 	$conexion   = new ConexionBean(); //Variable de conexión
 	$con        = $conexion->_con(); //Variable de conexión
-	$Params=(isset($_GET['params']))?$_GET['Params']:$_POST['Params'];
-	$Parametros=json_decode($Params,true);
-	$Accion=$Parametros['Action'];
+	$Accion     = "";
+	if(isset($_GET['params']) || isset($_POST['params']))
+	{
+		$Params=(isset($_GET['params']))?$_GET['Params']:$_POST['Params'];
+		$Parametros=json_decode($Params,true);
+		$Accion=$Parametros['Action'];
+	}
+	
 
 	switch ($Accion) {
 		case 'CheckUser':
@@ -31,6 +35,41 @@
 		return $result;
 	}
 
+	function GetUsers()
+	{
+		$Model = new UsersModel();
+		$users = $Model->GetUsersModel();
+		return $users;
+	}
+
+
+	function GetTypeUsers()
+	{
+		$model = new UsersModel();
+		$types = $model->GetTypeUsers();
+		return $types;
+	}
+
+	function buscarExistenciaPorUserName($user)
+	{
+		$model = new UsersModel();
+		$types = $model->GetUserByUserName($user);
+		return $types;
+	}
+
+	function RegistrarUsuario($user)
+	{
+		$model      = new UsersModel();
+		$Registered = $model->_RegisterUser($user);
+		return $Registered;
+	}
+
+	function UserById($id)
+	{
+		$model = new UsersModel();
+		$user  = $model->_UserById($id);
+		return $user;
+	}
 
 	function tranDoubleParam($query,$param,$param2)
 		{

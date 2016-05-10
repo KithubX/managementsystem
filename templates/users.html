@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12" ng-if="UsersService.error!=true">
 	<cc-spinner is-loading="UsersService.isLoading" message="Loading"></cc-spinner>
 	<table class="table table-striped">
 		<thead>
@@ -25,11 +25,13 @@
 				<button class="btn btn-success" ng-click="RedirectAdd()">Agregar</button>
 			</div>
 			<div class="col-md-3 BtnContent">
-				<button class="btn btn-warning">Editar</button>
+				<button class="btn btn-warning" ng-click="RedirectEdit(UsersService.selectedUser.id)">Editar</button>
 			</div>
 			<div class="col-md-3 BtnContent">
-				<button class="btn btn-danger">Danger</button>
+				<button class="btn btn-danger" ng-click="RedirectDelete(UsersService.selectedUser.id)">Eliminar</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="error" ng-if="UsersService.error==true"></div>

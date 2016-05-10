@@ -25,3 +25,29 @@
     height: 360px;
     background-repeat: no-repeat;
 }
+
+.RegisterContainer{
+    form{
+            display: block;
+            margin: 0 auto;
+            width: 52%;
+            overflow: hidden;
+            .Accept{
+                width:40%;
+                margin:2.5%;
+            }
+            .Cancel{
+                @extend .Accept;
+            }
+
+    }
+}
+
+.error{
+    background: url("img/error.jpg") 50% 50% no-repeat;
+    height: 200px;
+    background-size: 100%;
+    width: 503px;
+    display: block;
+    margin: 0 auto;
+}

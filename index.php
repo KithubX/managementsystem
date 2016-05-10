@@ -33,7 +33,9 @@
     <script src="js/angular-ui-router.js"></script>
     <script src="js/angular-animate.js"></script>
     <script src="js/toaster.min.js"></script>
+    <script src="js/jcs-auto-validate.js"></script>
     <script src="js/main.js"></script>
+
 </head>
 
 <body>

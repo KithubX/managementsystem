@@ -1,9 +1,6 @@
 <?php 
 	if(!defined("SPECIALCONSTANT")) die("acceso denegado");
 	
-	$conexion   = new ConexionBean(); //Variable de conexión
-	$con        = $conexion->_con(); //Variable de conexión
-
 	$app->get('/', function() use($app) 
 	{
  	   $app->response->setStatus(200);
@@ -12,69 +9,112 @@
 
 	$app->get('/users/', function() use($app) 
 	{
- 	    	$consultar  = new Consultar();
- 	    	$libros     = $consultar->_ConsultarLibros();
- 	    	$error      = $libros['error'];
+ 	    	$users      = GetUsers();
+ 	    	$error      = $users['error'];
  	    	$app->response->headers->set("Content-type","application/json");
  	    	$app->response->setStatus(200);
  	    	if($error==1)
  	    	{
- 	    		$datos = $libros['mensaje'];
+ 	    		$datos = $users['mensaje'];
  	    	}
  	    	else
  	    	{
- 	    		$datos = array("users"=>$libros['info']);
+ 	    		$datos = array("users"=>$users['info']);
  	    	}
  	    	
  	    	$app->response->body(json_encode($datos));
  	   	
 	}); 
 
-
-$app->get('/books/:id', function($id) use($app) 
+	$app->get('/userstype/', function() use($app) 
 	{
- 	   try 
- 	    {
- 	    	$connection = getConnection();
- 	    	$dbh        = $connection->prepare("select * from books where id = ?");
- 	    	$dbh->bindParam(1,$id);
- 	    	$dbh->execute();
- 	    	$books      = $dbh->fetchObject();
- 	    	$connection = null;
-
+			$types      = GetTypeUsers();
+ 	    	$error      = $types['error'];
  	    	$app->response->headers->set("Content-type","application/json");
  	    	$app->response->setStatus(200);
- 	    	$app->response->body(json_encode($books));
- 	   	}
- 	   catch (PDOException $e) 
-		{
-			echo "Error: ".$e->getMessage();	
-		}
+ 	    	if($error==1)
+ 	    	{
+ 	    		$datos = $types['mensaje'];
+ 	    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$types["mensaje"]);
+
+ 	    	}
+ 	    	else
+ 	    	{
+ 	    		$datos = array("info"=>$types["info"],"error"=>0,"mensaje"=>"ok");
+ 	    	}
+ 	    	
+ 	    	$app->response->body(json_encode($datos));
+ 	   	
 	}); 
 
-	$app->post("/books/", function() use($app){
-		$title  = $app->request->post("title");
-		$isbn   = $app->request->post("isbn");
-		$author = $app->request->post("author");
+	$app->get('/searchuserbyname/', function() use($app) 
+	{
+		// Tomando los datos
+		$data = $app->request->get();
+		$user = $data['name'];
 
-		try 
+		// Verificando que no existe el usuario
+		$searchUser = buscarExistenciaPorUserName($user);
+		if(count($searchUser)>0)
 		{
-			$con = getConnection();
-			$dbh = $con->prepare("INSERT INTO books VALUES(NULL,?,?,?,NOW())");
-			$dbh->bindParam(1,$title);
-			$dbh->bindParam(2,$isbn);
-			$dbh->bindParam(3,$author);
-			$dbh->execute();
- 	    	$bookId = $con->lastInsertId();
- 	    	$con = null;
- 	    	$app->response->headers->set("Content-type","application/json");
- 	    	$app->response->setStatus(200);
- 	    	$app->response->body(json_encode($bookId));
-		} catch (PDOException $e) {
-			echo "Error: ".$e->getMessage();
-		}
+			$userFinded = array("id"=>$searchUser['id'],"nb_user"=>$searchUser['nb_user'],
+				"pw_password"=>$searchUser['pw_password'],"id_rol"=>$searchUser['id_rol']);
+		}else{$userFinded = array();}
+		$app->response->headers->set("Content-type","application/json");
+ 	    $app->response->setStatus(200);
+ 	    $app->response->body(json_encode($userFinded));
 	});
 
+	$app->get('/searchUserById/', function() use($app) 
+	{
+		// Tomando los datos
+		$params    = $app->request->get();
+		$id_user   = $params['id_user'];
+
+		// Buscando el usuario por id.
+		$data      = UserById($id_user);
+		$error      = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	}); 
+
+	$app->post("/RegisterUser/", function() use($app){
+		$user = $app->request->post();
+		// Registrando al usuario
+		$data = RegistrarUsuario($user);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
+
+
+
+	
 	$app->put("/books/",function() use($app){
 		$id     = $app->request->put("id");
 		$title  = $app->request->put("title");

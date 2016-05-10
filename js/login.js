@@ -14,7 +14,7 @@ app.controller("LoginController",function($scope,$http,toaster){
 		var params         = JSON.stringify($scope.user);
 		// enviando la petición
 
-		$http({method: "post",url: "modules/controller.php",data: $.param({Params:params}), 
+		$http({method: "post",url: "modules/userscontroller.php",data: $.param({Params:params}), 
 				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				})
 				 .success(function(data, status, headers, config) 

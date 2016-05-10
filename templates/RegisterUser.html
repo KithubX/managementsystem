@@ -1,22 +1,46 @@
 <div class="col-md-12">
-    <div class="RegisterContainer">
-   		<form action="" class="form">
-   		    	<div class="form-group">
-   		    		<label for=""></label>
-   		    		<input type="text">
+	<cc-spinner is-loading="UsersService.isLoading" message="Loading"></cc-spinner>
+    <div class="RegisterContainer clearfix" ng-if="UsersService.error!=true && UsersService.isLoading == false ">
+    	<h3 class="text-center">{{title}}</h3>
+   		<form  class="form" novalidate ng-submit="SaveUser(userRegister)">
+	    	<div class="row">
+	    		<div class="form-group col-md-12">
+   		    		<label for="">Nombre: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="userRegister.nb_fname" name="name" required ng-pattern="/^[a-z\s]{1,60}$/i" ng-pattern-err-type="badPattern">
    		    	</div>
-   		    	<div class="form-group">
-   		    		<label for=""></label>
-   		    		<input type="text">
+   		    	<div class="form-group col-md-12">
+   		    		<label for="">Apellido: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="userRegister.nb_lname" name="name" required ng-pattern="/^[a-z\s]{1,60}$/i" ng-pattern-err-type="badPattern">
    		    	</div>
-   		    	<div class="form-group">
-   		    		<label for=""></label>
-   		    		<input type="text">
+				<div class="form-group col-md-12">
+   		    		<label for="">Email: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="userRegister.de_email" name="name" required ng-pattern="/^[a-z0-9_]{1,60}\@[a-z]{1,15}.[a-z]{1,6}(.[a-z]{1,5})?$/i" ng-pattern-err-type="badPattern">
    		    	</div>
-   		    	<div class="form-group">
-   		    		<label for=""></label>
-   		    		<input type="text">
+   		    	<div class="form-group col-md-12">
+   		    		<label for="">Usuario: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre de usuario..." ng-model="userRegister.nb_user" name="user" required ng-pattern="/^[a-z1-9_]{1,30}$/i" ng-pattern-err-type="badPattern" ng-model-options="{debounce:300}">
    		    	</div>
-   		    </form>    
+   		    	<div class="form-group col-md-12" ng-if="screenLoc=='add'">
+   		    		<label for="">Password: </label>
+   		    		<input type="password" class="form-control" placeholder="Ingrese el password..." required ng-model="userRegister.pw_password" minlength="8" name="password">
+   		    	</div>
+   		    	<div class="form-group col-md-12" ng-if="screenLoc=='add'">
+   		    		<label for="">Repetir Password</label>
+   		    		<input type="password" class="form-control" placeholder="repita el password..." ng-model="userRegister.passwordAgain" required minlength="8" name="passwordAgain">
+   		    	</div>
+   		    	<div class="form-group col-md-12">
+   		    		<label for=""></label>
+   		    		<select name="" id="" ng-options="type.id as type.nb_rol for type in UsersService.usersType" class="form-control"  ng-model="userRegister.id_rol" required name="tipo">
+   		    			<option value="">Seleccionar...</option>
+   		    		</select>
+   		    	</div>
+
+   		    	<div class="form-group col-md-12">
+   		    		<button class="btn btn-success Accept" type="submit">Guardar</button>
+   		    		<button class="btn btn-link Cancel" ng-click="UsersService.GoUsers()" type="button">Cancelar</button>
+   		    	</div>
+	    	</div><!-- r0w-->
+   		</form>    
     </div> 
 </div>
+<div class="error" ng-if="UsersService.error==true"></div>
