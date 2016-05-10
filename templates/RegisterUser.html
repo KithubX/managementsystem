@@ -2,7 +2,7 @@
 	<cc-spinner is-loading="UsersService.isLoading" message="Loading"></cc-spinner>
     <div class="RegisterContainer clearfix" ng-if="UsersService.error!=true && UsersService.isLoading == false ">
     	<h3 class="text-center">{{title}}</h3>
-   		<form  class="form" novalidate ng-submit="SaveUser(userRegister)">
+   		<form  class="form" novalidate ng-submit="UsersService.SaveUser(userRegister)">
 	    	<div class="row">
 	    		<div class="form-group col-md-12">
    		    		<label for="">Nombre: </label>
@@ -20,11 +20,11 @@
    		    		<label for="">Usuario: </label>
    		    		<input type="text" class="form-control" placeholder="Ingrese el nombre de usuario..." ng-model="userRegister.nb_user" name="user" required ng-pattern="/^[a-z1-9_]{1,30}$/i" ng-pattern-err-type="badPattern" ng-model-options="{debounce:300}">
    		    	</div>
-   		    	<div class="form-group col-md-12" ng-if="screenLoc=='add'">
+   		    	<div class="form-group col-md-12" ng-if="UsersService.ScreenLoc=='add'">
    		    		<label for="">Password: </label>
    		    		<input type="password" class="form-control" placeholder="Ingrese el password..." required ng-model="userRegister.pw_password" minlength="8" name="password">
    		    	</div>
-   		    	<div class="form-group col-md-12" ng-if="screenLoc=='add'">
+   		    	<div class="form-group col-md-12" ng-if="UsersService.ScreenLoc=='add'">
    		    		<label for="">Repetir Password</label>
    		    		<input type="password" class="form-control" placeholder="repita el password..." ng-model="userRegister.passwordAgain" required minlength="8" name="passwordAgain">
    		    	</div>

@@ -2,7 +2,7 @@ var app= angular.module("applogin",['jcs-autoValidate','angular-ladda','angularS
 
 app.controller("LoginController",function($scope,$http,toaster){
 	$scope.imageprofile = "assets/img/avatar_2x.png"
-	$scope.user = {};
+	$scope.user = [];
 	$scope.isLoading = false;
 
 	$scope.Login = function()
@@ -13,16 +13,14 @@ app.controller("LoginController",function($scope,$http,toaster){
 		$scope.user.Action = "CheckUser";
 		var params         = JSON.stringify($scope.user);
 		// enviando la petición
-
-		$http({method: "post",url: "modules/userscontroller.php",data: $.param({Params:params}), 
-				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-				})
+		console.log($scope.user.password);
+		$http.get("http://localhost/management/modules/index.php/login",{params:{name:$scope.user.name,password:$scope.user.password}})
 				 .success(function(data, status, headers, config) 
 				 {          	
 				   		$scope.isLoading = false;
 				   		if(!data.error)
 				   		{
-				   			if(data.clientes.length>0)
+				   			if(data.info.length>0)
 				   			{
 				   				toaster.pop('success',"Welcome Sweetie :D");
 				   				$scope.imageprofile = "css/img/mainbepa.jpg"

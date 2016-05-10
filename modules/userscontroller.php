@@ -2,35 +2,18 @@
 	session_start();
 	$conexion   = new ConexionBean(); //Variable de conexión
 	$con        = $conexion->_con(); //Variable de conexión
-	$Accion     = "";
-	if(isset($_GET['params']) || isset($_POST['params']))
-	{
-		$Params=(isset($_GET['params']))?$_GET['Params']:$_POST['Params'];
-		$Parametros=json_decode($Params,true);
-		$Accion=$Parametros['Action'];
-	}
 	
-
-	switch ($Accion) {
-		case 'CheckUser':
-			$result = CheckUser($Parametros);
-			echo json_encode($result);
-		break;
-
-	}
 	
-
-	function CheckUser($params)
+	function CheckUser($user,$pass)
 	{
-		$user   = $params['name'];
-		$pass   = $params['password'];
 		$query  = "SELECT * FROM users WHERE nb_user= ? AND pw_password = ?"; 
 		$result = tranDoubleParam($query,$user,$pass);
 		$amount = count($result['clientes']);
 		if($amount>0)
 		{
-			$user 		      = $result['clientes'][0];
-			$_SESSION["user"] = $user['nb_user'];
+			$user 		         = $result['clientes'][0];
+			$_SESSION["user"]    = $user['nb_user'];
+			$_SESSION["id_user"] = $user['id'];
 		}
 		return $result;
 	}
@@ -57,6 +40,13 @@
 		return $types;
 	}
 
+	function EditarUsuario($user)
+	{
+		$model      = new UsersModel();
+		$Registered = $model->_EditUser($user);
+		return $Registered;
+	}
+
 	function RegistrarUsuario($user)
 	{
 		$model      = new UsersModel();
@@ -74,8 +64,9 @@
 	function tranDoubleParam($query,$param,$param2)
 		{
 			$clientes = "";
-			$error = false;
-			$msj   = "";
+			$error   = 0;
+			$msj = "";
+			$info    = "";
 			R::begin();
 			    try{
 			       $clientes = R::getAll($query,[$param,$param2]);

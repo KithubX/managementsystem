@@ -37,6 +37,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state){
 		"error":false,
 		"search":null,
 		"userRegister":null,
+		"ScreenLoc":null,
 		"GoUsers":function(){
 			$state.go("users");
 		},	
@@ -46,6 +47,11 @@ app.service("usersService",function($http,toaster,$rootScope,$state){
 					
 		},
 		"SaveUser":function(user){
+			if(self.ScreenLoc!="add")
+			{
+				user.pw_password   = "xxxxxxxx";
+				user.passwordAgain = "xxxxxxxx";
+			}
 			// Validando los datos
 			if(user.pw_password == user.passwordAgain)
 			{
@@ -60,12 +66,18 @@ app.service("usersService",function($http,toaster,$rootScope,$state){
 					 		
 					 		var Data = response.data;
 					 		if(Data.error != 1){
-					 			var amountUser = Object.keys(Data).length;
+					 			var amountUser = (self.ScreenLoc=="add")?Object.keys(Data).length:0;
 					 			if(amountUser==0)
 					 			{
+					 				// Verificando si se edita o se guarda
+					 				var send_method = (self.ScreenLoc=="add")?"post":"put";
+					 				var url_method  = (self.ScreenLoc=="add")?"RegisterUser":"EditUser";
+					 				var messageEnd  = (self.ScreenLoc=="add")?"Usuario Registrado!":"Usuario Editado";
+					 				var user_id     = (user.id!=undefined)?user.id:0;
+
 					 				//Registrando al usuario.
-					 				$http({method: "post",url:"http://localhost/management/modules/index.php/RegisterUser",
-										data: $.param({"nb_fname":user.nb_fname,"nb_lname":user.nb_lname,"de_email":user.de_email,"nb_user":user.nb_user,"password":user.pw_password,"type":user.id_rol}), 
+					 				$http({method: send_method,url:"http://localhost/management/modules/index.php/"+url_method,
+										data: $.param({"nb_fname":user.nb_fname,"nb_lname":user.nb_lname,"de_email":user.de_email,"nb_user":user.nb_user,"password":user.pw_password,"type":user.id_rol,"user_id":user_id}), 
 									  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 									})
 									 .then(
@@ -74,7 +86,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state){
 									 		var Data = response.data;
 									 		if(Data.error != 1){
 									 			self.isLoading = false;
-									 			toaster.pop('success',"Usuario registrado");	
+									 			toaster.pop('success',messageEnd);	
 									 			self.userRegister = [];
 
 									   		}else{
@@ -246,87 +258,23 @@ app.config(function($stateProvider,$urlRouterProvider){
 });
 
 app.controller("RegisterUserController",function($scope,usersService,$http,toaster,$state){
-	$scope.title        = "Registro de usuarios";
-	$scope.UsersService = usersService;
+	$scope.UsersService 		  = usersService;
 	$scope.UsersService.GetUsersType();
-	$scope.screenLoc       = "add";
-	$scope.types = $scope.UsersService.usersType;
-	$scope.userRegister = $scope.UsersService.userRegister;
-
-	$scope.SaveUser = function(user)
-	{
-		if(user.pw_password == user.passwordAgain)
-			{
-				// Validando si no existe el nombre de usuario.
-				if(!self.isLoading)
-				{
-					$scope.UsersService.isLoading = true;
-
-					//validando que no existe el nombre de usuario
-					$scope.UsersService.ValidateUser(user.nb_user).then(
-					 	function(response){
-					 		
-					 		var Data = response.data;
-					 		if(Data.error != 1){
-					 			var amountUser = Object.keys(Data).length;
-					 			if(amountUser==0)
-					 			{
-					 				//Registrando al usuario.
-					 				$http({method: "post",url:"http://localhost/management/modules/index.php/RegisterUser",
-										data: $.param({"nb_fname":user.nb_fname,"nb_lname":user.nb_lname,"de_email":user.de_email,"nb_user":user.nb_user,"password":user.pw_password,"type":user.id_rol}), 
-									  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-									})
-									 .then(
-									 	function(response){
-									 		
-									 		var Data = response.data;
-									 		if(Data.error != 1){
-									 			$scope.UsersService.isLoading = false;
-									 			toaster.pop('success',"Usuario registrado");	
-									 			$scope.UsersService.userRegister = [];
-
-									   		}else{
-									   			$scope.UsersService.error     = true;
-									 			$scope.UsersService.isLoading = false;
-									   			toaster.pop('error',Data.mensaje);	
-									   		}
-									   		//self.usersType = data;
-									 	},
-									 	function(data){
-									 		//self.error     = true;
-									 		$scope.UsersService.isLoading = false;
-									 		toaster.pop('error',data.statusText);	
-									 	}
-									 )
-					 			}else{
-					 				toaster.pop('error',"Ese nombre de usuario ya existe, favor de usar otro.");	
-					 			}
-					   		}else{
-					   			$scope.UsersService.error     = true;
-					 			$scope.UsersService.isLoading = false;
-					   			toaster.pop('error',Data.mensaje);	
-					   		}
-					 	},
-					 	function(data){
-					 		//self.error     = true;
-					 		$scope.UsersService.isLoading = false;
-					 		toaster.pop('error',data.statusText);	
-					 	}
-					 )
-			}
-		}
-	}
+	$scope.title        		  = "Registro de usuarios";
+	$scope.UsersService.ScreenLoc = "add";
+	$scope.types 				  = $scope.UsersService.usersType;
+	$scope.userRegister 		  = $scope.UsersService.userRegister;
 		
 });
 
 app.controller("editUserController",function($scope,usersService,$http,toaster,$state,$stateParams){
-	$scope.title        = "Edición de usuarios";
-	$scope.screenLoc       = "edit";
-	$scope.id_user      = $stateParams.id_user;
-	$scope.UsersService = usersService;
-	$scope.userRegister = [];
+	$scope.UsersService 		  = usersService;
 	$scope.UsersService.GetUsersType();
-	$scope.types = $scope.UsersService.usersType;
+	$scope.title        		  = "Edición de usuarios";
+	$scope.UsersService.ScreenLoc = "edit";
+	$scope.id_user      		  = $stateParams.id_user;
+	$scope.userRegister 		  = [];
+	$scope.types				  = $scope.UsersService.usersType;
 
 
 

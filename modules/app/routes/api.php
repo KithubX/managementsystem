@@ -7,6 +7,23 @@
 	    echo "Welcome to Slim 3.0 based API";
 	}); 
 
+	$app->get('/login/', function() use($app) 
+	{
+ 	    	$data 	  = $app->request->get();
+ 	    	$user 	  = $data['name'];
+ 	    	$password = $data['password'];
+ 	    	$datos    = CheckUser($user,$password);
+ 	    	// Verificando si hay error
+ 	    	if($datos['error']!=1)
+ 	    	{	
+ 	    		$datos = array("info"=>['clientes'],"error"=>0,"mensaje"=>"");
+ 	    	}else{
+ 	    		$datos = $datos['mensaje'];
+ 	    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$datos["msj"]);
+ 	    	}
+ 	   		$app->response->body(json_encode($datos));
+	}); 
+
 	$app->get('/users/', function() use($app) 
 	{
  	    	$users      = GetUsers();
@@ -111,7 +128,10 @@
     	$app->response->body(json_encode($datos));
 	});
 
-
+	$app->put("/EditUser/", function() use($app){
+		$user = $app->request->put();
+		$data = EditarUsuario($user);
+	});
 
 
 	
