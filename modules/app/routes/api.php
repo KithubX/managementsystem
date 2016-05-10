@@ -131,6 +131,21 @@
 	$app->put("/EditUser/", function() use($app){
 		$user = $app->request->put();
 		$data = EditarUsuario($user);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
 	});
 
 

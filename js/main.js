@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module("app",['ui.router','toaster','ngAnimate','angularSpinner','jcs-autoValidate']);
+var app = angular.module("app",['ui.router','toaster','ngAnimate','angularSpinner','jcs-autoValidate','ngBootbox']);
 
 app.directive("ccSomething",function(){
 	return{
@@ -25,7 +25,7 @@ app.directive("ccSpinner",function(){
 	}
 });
 
-app.service("usersService",function($http,toaster,$rootScope,$state){
+app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 	var self = {
 		"selectedUser": null,
 		"isLoading":false,
@@ -45,6 +45,20 @@ app.service("usersService",function($http,toaster,$rootScope,$state){
 				return $http.get("http://localhost/management/modules/index.php/searchuserbyname",{params:{name:User}})
 			
 					
+		},
+		"DeleteUser":function(user)
+		{
+			if(user==null)
+			{
+				toaster.pop('error',"Favor de seleccionar un usuario");	
+			}else{
+				$ngBootbox.confirm('A question?')
+			    .then(function() {
+			        console.log('Confirmed!');
+			    }, function() {
+			        console.log('Confirm dismissed!');
+			    });
+			}
 		},
 		"SaveUser":function(user){
 			if(self.ScreenLoc!="add")

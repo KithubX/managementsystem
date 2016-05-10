@@ -38,6 +38,21 @@
 			return $datos;
 		}
 
+		function _EditUser($user)
+		{
+			$userLoad = R::load("users",$user['user_id']);
+			
+			// Editando las propiedades
+			$userLoad->nb_user  = $user['nb_user'];
+			$userLoad->nb_lname = $user['nb_lname'];
+			$userLoad->nb_fname = $user['nb_fname'];
+			$userLoad->de_email = $user['de_email'];
+			$userLoad->id_rol   = $user['type'];
+			// almacenando el usuario
+			$datos = $this->StoreObject($userLoad);
+			return $datos;
+		}
+
 		function _UserById($id)
 		{
 			$consultar = new Consultar();
