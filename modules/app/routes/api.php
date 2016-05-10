@@ -148,6 +148,35 @@
     	$app->response->body(json_encode($datos));
 	});
 
+	$app->get("/deleteUser/", function() use($app){
+		$user = $app->request->get();
+		$id   = $user['user'];
+		$data = EliminarUsuario($id);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		// Buscando los usuarios restantes.
+    		$users      = GetUsers();
+ 	    	$error      = $users['error'];
+ 	    	if($error!=0)
+ 	    	{
+ 	    		$info = "";
+ 	    	}else{$info = $users['info'];}
+    		$datos = array("info"=>$info,"error"=>$error ,"mensaje"=>$users['mensaje']);
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
+
 
 	
 	$app->put("/books/",function() use($app){

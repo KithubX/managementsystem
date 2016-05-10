@@ -52,9 +52,27 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 			{
 				toaster.pop('error',"Favor de seleccionar un usuario");	
 			}else{
-				$ngBootbox.confirm('A question?')
+				$ngBootbox.confirm('¿Desea eliminar al usuario: '+user.nb_user+'?')
 			    .then(function() {
-			        console.log('Confirmed!');
+			        // DEleting the user.
+			        self.isLoading = true;
+			       var id_user = user.id;
+			       $http.get("http://localhost/management/modules/index.php/deleteUser",{params:{user:id_user}}).then(
+					 	function(response){
+					 		self.isLoading = false;
+					 		var error = response.data.error;
+					 		if(error!=1)
+					 		{
+					 			console.log(response.data);
+					 			self.users = response.data.info;
+					 		}else{toaster.pop('error',response.data.mensaje);	}
+					 	},
+					 	function(data){
+					 		//self.error     = true;
+					 		self.isLoading = false;
+					 		toaster.pop('error',data.statusText);	
+					 	}
+					 )
 			    }, function() {
 			        console.log('Confirm dismissed!');
 			    });

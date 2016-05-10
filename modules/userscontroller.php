@@ -61,6 +61,13 @@
 		return $user;
 	}
 
+	function EliminarUsuario($user)
+	{
+		$model = new UsersModel();
+		$user  = $model->_deleteUserById($user);
+		return $user;
+	}
+
 	function tranDoubleParam($query,$param,$param2)
 		{
 			$clientes = "";

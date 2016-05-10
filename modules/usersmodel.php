@@ -60,6 +60,17 @@
 			return $user;
 		}
 
+		function _deleteUserById($id)
+		{
+			$userLoad = R::load("users",$id);
+			
+			// Editando las propiedades
+			$userLoad->sn_activo = 0;
+			// almacenando el usuario
+			$datos = $this->StoreObject($userLoad);
+			return $datos;
+		}
+
 		function StoreObject($object)
 		{
 			$error   = 0;
