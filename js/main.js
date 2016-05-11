@@ -1,5 +1,7 @@
 'use strict';
-var app = angular.module("app",['ui.router','toaster','ngAnimate','angularSpinner','jcs-autoValidate','ngBootbox']);
+var app = angular.module("app",['ui.router','toaster','ngAnimate','angularSpinner',
+	'jcs-autoValidate','ngBootbox','angularUtils.directives.dirPagination','ui.bootstrap',
+	'appProveedores']);
 
 app.directive("ccSomething",function(){
 	return{
@@ -42,7 +44,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 			$state.go("users");
 		},	
 		"ValidateUser":function(User){
-				return $http.get("http://localhost/management/modules/index.php/searchuserbyname",{params:{name:User}})
+				return $http.get("http://localhost/managementsystem/modules/index.php/searchuserbyname",{params:{name:User}})
 			
 					
 		},
@@ -57,7 +59,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 			        // DEleting the user.
 			        self.isLoading = true;
 			       var id_user = user.id;
-			       $http.get("http://localhost/management/modules/index.php/deleteUser",{params:{user:id_user}}).then(
+			       $http.get("http://localhost/managementsystem/modules/index.php/deleteUser",{params:{user:id_user}}).then(
 					 	function(response){
 					 		self.isLoading = false;
 					 		var error = response.data.error;
@@ -108,7 +110,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 					 				var user_id     = (user.id!=undefined)?user.id:0;
 
 					 				//Registrando al usuario.
-					 				$http({method: send_method,url:"http://localhost/management/modules/index.php/"+url_method,
+					 				$http({method: send_method,url:"http://localhost/managementsystem/modules/index.php/"+url_method,
 										data: $.param({"nb_fname":user.nb_fname,"nb_lname":user.nb_lname,"de_email":user.de_email,"nb_user":user.nb_user,"password":user.pw_password,"type":user.id_rol,"user_id":user_id}), 
 									  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 									})
@@ -159,7 +161,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 			if(!self.isLoading)
 			{
 				self.isLoading = true;
-				$http({method: "get",url:"http://localhost/management/modules/index.php/userstype",data: $.param({}), 
+				$http({method: "get",url:"http://localhost/managementsystem/modules/index.php/userstype",data: $.param({}), 
 				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				})
 				 .then(
@@ -189,7 +191,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 			if(!self.isLoading)
 			{
 				self.isLoading = true;
-				$http({method: "get",url:"http://localhost/management/modules/index.php/users",data: $.param({}), 
+				$http({method: "get",url:"http://localhost/managementsystem/modules/index.php/users",data: $.param({}), 
 				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				})
 				 .then(
@@ -220,6 +222,8 @@ app.controller("usersController",function($scope,toaster,usersService,$state){
 	$scope.UsersService = usersService;
 	$scope.UsersService.getUsers();
 	$scope.loader = true;
+	$scope.currentPage       = 1; // Página actual, para paginación
+	$scope.pageSize 	     = 5; // Tamaño de la página, para paginación.
 
 	$scope.SelectUser = function(user)
 	{
@@ -265,12 +269,6 @@ app.config(function($stateProvider,$urlRouterProvider){
 		controller:'usersController'
 	})
 
-	.state('beautiful',{
-		url:'/beautiful',
-		templateUrl:'templates/beautiful.html',
-		controller:'beautifulController'
-	})
-
 	.state('RegisterUser',{
 		url:'/RegisterUser',
 		templateUrl:'templates/RegisterUser.html',
@@ -282,9 +280,13 @@ app.config(function($stateProvider,$urlRouterProvider){
 		templateUrl:'templates/RegisterUser.html',
 		controller:'editUserController'
 		
-	});
+	})
 
-	
+	.state('proveedores',{
+		url:'/proveedores',
+		templateUrl:'templates/proveedores.html',
+		controller:'proveedoresController'
+	});
 
 	$urlRouterProvider.otherwise('/');
 });
@@ -312,7 +314,7 @@ app.controller("editUserController",function($scope,usersService,$http,toaster,$
 
 	// Buscando por id el usuario
 	$scope.UsersService.isLoading = true;
-	$http.get("http://localhost/management/modules/index.php/searchUserById",{params:{id_user:$scope.id_user}}).then(
+	$http.get("http://localhost/managementsystem/modules/index.php/searchUserById",{params:{id_user:$scope.id_user}}).then(
 		function (response)
 		{
 	 		$scope.UsersService.isLoading = false;

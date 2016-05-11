@@ -9,6 +9,7 @@
 				u.nb_user,
 				u.nb_lname,
 				u.nb_fname,
+				u.de_email,
 				r.nb_rol
 				FROM users as u
 				INNER JOIN roles r
