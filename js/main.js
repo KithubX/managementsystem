@@ -286,6 +286,11 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/proveedores',
 		templateUrl:'templates/proveedores.html',
 		controller:'proveedoresController'
+	})
+	.state('addSuplier',{
+		url:'/addSuplier',
+		templateUrl:'templates/RegisterSuplier.html',
+		controller:'RegisterSuplierController'
 	});
 
 	$urlRouterProvider.otherwise('/');

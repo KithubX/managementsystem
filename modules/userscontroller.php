@@ -1,5 +1,4 @@
 <?php 
-	session_start();
 	$conexion   = new ConexionBean(); //Variable de conexión
 	$con        = $conexion->_con(); //Variable de conexión
 	

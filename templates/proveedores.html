@@ -1,5 +1,5 @@
 <div class="col-md-12" ng-if="UsersService.error!=true">
-	<cc-spinner is-loading="UsersService.isLoading" message="Loading"></cc-spinner>
+	<cc-spinner is-loading="ProveedoresService.isLoading" message="Loading"></cc-spinner>
 	<div class="UsersContainer" ng-if="!UsersService.isLoading">
 		<div class="col-md-12 Filtros pleft">
 	    <div class="row">
@@ -16,20 +16,18 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th class="text-center">Name</th>
-				<th class="text-center">Lastname</th>
-				<th class="text-center">User</th>
-				<th class="text-center">Email</th>
-				<th class="text-center">Rol</th>
+				<th class="text-center">Proveedor</th>
+				<th class="text-center">Descripción</th>
+				<th class="text-center">Dirección</th>
+				<th class="text-center">Téléfono</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="text-center" dir-paginate="user in UsersService.users | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':user.id == UsersService.selectedUser.id}" ng-click="SelectUser(user)">
-				<td>{{user.nb_fname}}</td>
-				<td>{{user.nb_lname}}</td>
-				<td>{{user.nb_user}}</td>
-				<td>{{user.de_email}}</td>
-				<td>{{user.nb_rol}}</td>
+			<tr class="text-center" dir-paginate="prov in ProveedoresService.proveedores | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':prov.id == ProveedoresService.selectedSuplier.id}" ng-click="SelectSuplier(prov)">
+				<td>{{prov.nb_proveedor}}</td>
+				<td>{{prov.desc_proveedor}}</td>
+				<td>{{prov.desc_address}}</td>
+				<td>{{prov.num_telefono}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -46,7 +44,7 @@
 				<button class="btn btn-warning" ng-click="RedirectEdit(UsersService.selectedUser.id)">Editar</button>
 			</div>
 			<div class="col-md-3 BtnContent">
-				<button class="btn btn-danger" ng-click="UsersService.DeleteUser(UsersService.selectedUser)" >Eliminar</button>
+				<button class="btn btn-danger" ng-click="ProveedoresService.DeleteSuplier(ProveedoresService.selectedSuplier)" >Eliminar</button>
 			</div>
 		</div>
 		

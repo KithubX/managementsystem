@@ -16,7 +16,13 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th class="text-center">Name</th>
+				<th class="text-center">
+					Name
+					<div class="sortables">
+						<span class="fa fa-sort-asc" ng-click="UsersService.ordering= 'nb_fname'" ng-style="{'cursor':'pointer'}"></span>
+                        <span class="fa fa-sort-desc" ng-click="UsersService.ordering='-nb_fname'" ng-style="{'cursor':'pointer'}"></span>
+					</div>
+				</th>
 				<th class="text-center">Lastname</th>
 				<th class="text-center">User</th>
 				<th class="text-center">Email</th>
@@ -24,7 +30,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="text-center" dir-paginate="user in UsersService.users | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':user.id == UsersService.selectedUser.id}" ng-click="SelectUser(user)">
+			<tr class="text-center" dir-paginate="user in UsersService.users | filter:q | itemsPerPage: pageSize | orderBy:UsersService.ordering" current-page="currentPage" ng-class="{'selected':user.id == UsersService.selectedUser.id}" ng-click="SelectUser(user)">
 				<td>{{user.nb_fname}}</td>
 				<td>{{user.nb_lname}}</td>
 				<td>{{user.nb_user}}</td>

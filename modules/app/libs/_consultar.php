@@ -59,6 +59,16 @@
 			return $datos;
 		}
 
+		// Funciones de Proveedores
+		function _ConsultarProveedores()
+		{
+			$query = '
+				SELECT * FROM proveedores WHERE sn_activo = 1
+			';
+			$proveedores = $this->Ejecutarconsulta($query);
+			return $proveedores;
+		}//_ConsultarLibros
+
 		function Ejecutarconsulta($query)
 		{
 			$error   = 0;
@@ -79,5 +89,6 @@
 			$datos = array("info"=>$info,"error"=>$error,"mensaje"=>$mensaje);
 			return $datos;
 		}
+
 	}//Consultar
  ?>

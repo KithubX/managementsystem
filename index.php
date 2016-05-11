@@ -56,9 +56,9 @@
                     <li uib-dropdown>
                         <a uib-dropdown-toggle>Proveedores <span class="caret"></span></a>
                         <ul uib-dropdown-menu>
-                            <li role="presentation"><a ui-sref="proveedores">Why you're Amazing </a></li>
-                            <li role="presentation"><a ui-sref="beautiful">Why you're Most Beautiful </a></li>
-                            <li role="presentation" class="active"><a href="logout.php">Logout </a></li>
+                            <li role="presentation"><a ui-sref="proveedores">Proveedores </a></li>
+                            <li role="presentation"><a ui-sref="beautiful">Productos</a></li>
+                            <li role="presentation" class="active"><a href="logout.php">Compras </a></li>
                         </ul>
                     </li>
                 </ul>
@@ -87,7 +87,7 @@
         <div class="row">
             <div class="col-md-4 col-sm-6 footer-navigation">
                 <h3><a href="#"><span>Management</span></a></h3>
-                <p class="links"><a href="#">Home</a><strong> · </strong><a ui-sref="amazing">I am Amazing</a><strong> · </strong><a ui-sref="beautiful" >I am Beautiful </a><strong> · </strong></p>
+                <p class="links"><a href="#">Home</a><strong> · </strong><a ui-sref="amazing">I am Amazing</a><strong> · </strong><a ui-sref="beautiful" >Something </a><strong> · </strong></p>
                 <p class="company-name">Chuvakovich Zukovsky © 2016 </p>
             </div>
             <div class="col-md-4 col-sm-6 footer-contacts">
@@ -100,9 +100,9 @@
             </div>
             <div class="clearfix visible-sm-block"></div>
             <div class="col-md-4 footer-about">
-                <h4>About the most amazing girl ever</h4>
-                <p> Loves the classic 80's and 90's movies, animals, want to be a movie director and well
-                    she's sexier than sarah connor!.
+                <h4>System</h4>
+                <p> 
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi fugiat nam numquam totam delectus eaque libero, veritatis iste laborum nesciunt, iure possimus atque est nostrum minus, placeat, doloremque accusamus sint.
                 </p>
                 <div class="social-links social-icons"><a href="https://www.facebook.com/profile.php?id=1315176419"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a></div>
             </div>
