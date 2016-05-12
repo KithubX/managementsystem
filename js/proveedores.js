@@ -1,5 +1,21 @@
 var app = angular.module("appProveedores",['ui.router','toaster','ngAnimate','angularSpinner','jcs-autoValidate','ngBootbox','angularUtils.directives.dirPagination','ui.bootstrap']);
 
+app.service("ProductService",function($http,$state,$ngBootbox,toaster){
+	var self = {
+		"isLoading":false,
+		"ordering":"name",
+		"proveedores":[],
+		"error":false,
+		"search":null,
+		"selectedSuplier":null,
+		"screenLocation":null,
+		"suplregister":null
+	};
+	return self;
+});
+
+
+
 app.service("ProveedoresService",function($http,$state,$ngBootbox,toaster){
 
 	var self = {
@@ -194,5 +210,9 @@ app.controller("editSuplierController",function($scope,ProveedoresService,$state
 	 		toaster.pop('error',data.statusText);	
 	 	}
 	);
+});
+
+app.controller("productosController",function($scope,$http){
+	alert("holis");
 });
 

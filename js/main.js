@@ -295,6 +295,11 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/editSuplier/:id',
 		templateUrl:'templates/RegisterSuplier.html',
 		controller:'editSuplierController'	
+	})
+	.state('productos',{
+		url:'/productos/:id',
+		templateUrl:'templates/productos.html',
+		controller:'productosController'	
 	});
 
 	$urlRouterProvider.otherwise('/');
@@ -346,3 +351,4 @@ app.run(
 		});
 	}
 );
+

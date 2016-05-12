@@ -48,7 +48,7 @@
 			$data = $this->EjecuteQueryOneParam($query,$id);
 			return $data;
 		}
-		
+
 		function _ConsultarProveedores()
 		{
 			$query = '
@@ -64,6 +64,25 @@
 			$query = 'SELECT * FROM proveedores WHERE nb_proveedor = ?';
 			$data = $this->EjecuteQueryOneParam($query,$name);
 			return $data;
+		}
+
+		// Funciones de productos
+		function _GetProducts()
+		{
+			$query= '
+				SELECT
+				p.id,
+				p.nb_producto,
+				p.desc_producto,
+				p.num_precio,
+				pr.nb_proveedor
+
+				FROM productos p
+				INNER JOIN proveedores pr
+				ON p.id_proveedor = pr.id
+			';
+			$productos = $this->Ejecutarconsulta($query);
+			return $productos;
 		}
 
 		function Ejecutarconsulta($query)
