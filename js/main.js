@@ -278,8 +278,7 @@ app.config(function($stateProvider,$urlRouterProvider){
 	.state('editUser',{
 		url:'/editUser/:id_user',
 		templateUrl:'templates/RegisterUser.html',
-		controller:'editUserController'
-		
+		controller:'editUserController'	
 	})
 
 	.state('proveedores',{
@@ -291,6 +290,11 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/addSuplier',
 		templateUrl:'templates/RegisterSuplier.html',
 		controller:'RegisterSuplierController'
+	})
+	.state('editSuplier',{
+		url:'/editSuplier/:id',
+		templateUrl:'templates/RegisterSuplier.html',
+		controller:'editSuplierController'	
 	});
 
 	$urlRouterProvider.otherwise('/');

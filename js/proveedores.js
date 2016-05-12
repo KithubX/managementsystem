@@ -9,6 +9,71 @@ app.service("ProveedoresService",function($http,$state,$ngBootbox,toaster){
 		"error":false,
 		"search":null,
 		"selectedSuplier":null,
+		"screenLocation":null,
+		"suplregister":null,
+		"GoSupliers":function(){
+			$state.go("proveedores");
+		},	
+		"ValidateSuplier":function(name){
+			return $http.get("http://localhost/managementsystem/modules/index.php/searchProviderbyname",{params:{name:name}})
+		},
+		"SaveSuplier":function(suplier){
+			if(!self.isLoading)
+			{
+				self.isLoading = true;
+				self.ValidateSuplier(suplier.nb_proveedor).then(
+					function(response)
+					{
+						var amount = (self.screenLocation=="Add")?response.data.info:0;
+						if(amount==0)
+						{	
+							// Verificando si se edita o se guarda
+			 				var send_method = (self.screenLocation=="Add")?"post":"put";
+			 				var url_method  = (self.screenLocation=="Add")?"RegisterSuplier":"EditSuplier";
+			 				var messageEnd  = (self.screenLocation=="Add")?"Proveedor Registrado!":"Proveedor Editado";
+			 				var suplier_id  = (suplier.id!=undefined)?suplier.id:0;
+			 				//Registrando al usuario.
+			 				$http({method: send_method,url:"http://localhost/managementsystem/modules/index.php/"+url_method,
+								data: $.param({"nb_proveedor":suplier.nb_proveedor,"desc_proveedor":suplier.desc_proveedor,"desc_address":suplier.desc_address,"num_telefono":suplier.num_telefono,"suplier_id":suplier_id}), 
+							  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							})
+							 .then(
+							 	function(response){
+							 		console.log(response);
+							 		var Data = response.data;
+							 		if(Data.error != 1){
+							 			self.isLoading = false;
+							 			toaster.pop('success',messageEnd);	
+							 			self.suplregister = [];
+
+							   		}else{
+							   			self.error     = true;
+							 			self.isLoading = false;
+							   			toaster.pop('error',Data.mensaje);	
+							   		}
+							   		//self.usersType = data;
+							 	},
+							 	function(data){
+							 		//self.error     = true;
+							 		self.isLoading = false;
+							 		toaster.pop('error',data.statusText);	
+							 	}
+							 )
+						}else{
+							self.isLoading = false;
+				 			toaster.pop('error',"Este nombre de proveedor ya está registrado.")
+						}
+					},
+					function(data)
+					{
+						self.error     = true;
+				 		self.isLoading = false;
+				 		toaster.pop('error',data.statusText);
+					}
+				);
+			}
+			
+		},
 		"DeleteSuplier":function(suplier){
 			if(suplier==null)
 			{
@@ -82,17 +147,52 @@ app.controller("proveedoresController",function($scope,ProveedoresService,$state
 
 	$scope.SelectSuplier = function(suplier)
 	{
-		$scope.ProveedoresService.selectedSuplier = suplier;
+		if(ProveedoresService.selectedSuplier == suplier)
+			{
+				ProveedoresService.selectedSuplier = null;
+			}else{ProveedoresService.selectedSuplier = suplier;}
 	}
 
 	$scope.RedirectAdd = function()
 	{
 		$state.go("addSuplier");
 	}
+
+	$scope.RedirectEdit = function(id)
+	{
+		if(id==null)
+		{
+			toaster.pop('error',"Favor de seleccionar un Proveedor");	
+		}else{
+			$state.go("editSuplier",{id:id});
+		}
+	}
 });
 
 app.controller("RegisterSuplierController",function($scope,ProveedoresService){
 	$scope.title   			  = "Registrar Proveedor";
 	$scope.ProveedoresService = ProveedoresService;
+	$scope.ProveedoresService.screenLocation = "Add";
+	$scope.suplregister       = $scope.ProveedoresService.suplregister;
+});
+
+app.controller("editSuplierController",function($scope,ProveedoresService,$stateParams,$http,toaster){
+	$scope.title   			  = "Editar Proveedor";
+	$scope.ProveedoresService = ProveedoresService;
+	$scope.ProveedoresService.screenLocation = "Edit";
+	$scope.ProveedoresService.isLoading = true;
+	$scope.id_suplier      	  = $stateParams.id;
+	$http.get("http://localhost/managementsystem/modules/index.php/searchProviderById",{params:{id:$scope.id_suplier}}).then(
+		function (response)
+		{
+	 		$scope.ProveedoresService.isLoading = false;
+	 		$scope.suplregister = response.data.info[0];
+	 		console.log($scope.userRegister);
+	 	},
+	 	function(data){
+	 		self.error = true;
+	 		toaster.pop('error',data.statusText);	
+	 	}
+	);
 });
 

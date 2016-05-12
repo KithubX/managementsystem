@@ -224,6 +224,99 @@
     	
     	$app->response->body(json_encode($datos));
 	});
+
+	$app->get("/searchProviderbyname/", function() use($app){
+		$data  = $app->request->get();
+		$name  = $data['name'];
+		$data  = GetSuplierByName($name);
+		$error = $data['error'];
+
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$amount = count($data['info']);
+    		$datos = array("info"=>$amount,"error"=>1,"mensaje"=>$data["mensaje"]);
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
+	$app->post("/RegisterSuplier/", function() use($app){
+		$suplier = $app->request->post();
+		// Registrando al usuario
+		$data   = RegistrarProveedor($suplier);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
+
+	$app->get('/searchProviderById/', function() use($app) 
+	{
+		// Tomando los datos
+		$params    = $app->request->get();
+		$id        = $params['id'];
+
+		// Buscando el usuario por id.
+		$data      = SuplierById($id);
+		$error      = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	}); 
+
+	$app->put("/EditSuplier/", function() use($app){
+		$suplier = $app->request->post();
+		//Editando al usuario
+		$data   = EditarProveedor($suplier);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
+	//
 	
 	$app->put("/books/",function() use($app){
 		$id     = $app->request->put("id");

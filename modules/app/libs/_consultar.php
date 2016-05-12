@@ -38,7 +38,35 @@
 			return $data;
 		}
 
-		function EjecuteQueryOneParam($query,$param)
+		
+		// Funciones de Proveedores
+		function _GetSuplierById($id)
+		{
+			$query = '
+				SELECT * FROM proveedores where id = ?
+			';
+			$data = $this->EjecuteQueryOneParam($query,$id);
+			return $data;
+		}
+		
+		function _ConsultarProveedores()
+		{
+			$query = '
+				SELECT * FROM proveedores WHERE sn_activo = 1
+			';
+			$proveedores = $this->Ejecutarconsulta($query);
+			return $proveedores;
+		}//_ConsultarLibros
+
+
+		function _GetSuplierByName($name)
+		{
+			$query = 'SELECT * FROM proveedores WHERE nb_proveedor = ?';
+			$data = $this->EjecuteQueryOneParam($query,$name);
+			return $data;
+		}
+
+		function Ejecutarconsulta($query)
 		{
 			$error   = 0;
 			$mensaje = "";
@@ -46,7 +74,7 @@
 			R::freeze(1);
 			R::begin();
 			    try{
-			       $info = R::getAll($query,[$param]);
+			       $info = R::getAll($query);
 			        R::commit();
 			    }
 			    catch(Exception $e) {
@@ -59,17 +87,7 @@
 			return $datos;
 		}
 
-		// Funciones de Proveedores
-		function _ConsultarProveedores()
-		{
-			$query = '
-				SELECT * FROM proveedores WHERE sn_activo = 1
-			';
-			$proveedores = $this->Ejecutarconsulta($query);
-			return $proveedores;
-		}//_ConsultarLibros
-
-		function Ejecutarconsulta($query)
+		function EjecuteQueryOneParam($query,$param)
 		{
 			$error   = 0;
 			$mensaje = "";
@@ -77,7 +95,7 @@
 			R::freeze(1);
 			R::begin();
 			    try{
-			       $info = R::getAll($query);
+			       $info = R::getAll($query,[$param]);
 			        R::commit();
 			    }
 			    catch(Exception $e) {
