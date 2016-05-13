@@ -366,27 +366,41 @@
     	$app->response->body(json_encode($datos));
 	});
 
-	$app->put("/books/",function() use($app){
-		$id     = $app->request->put("id");
-		$title  = $app->request->put("title");
-		$isbn   = $app->request->put("isbn");
-		$author = $app->request->put("author");
-		try 
-		{
-			$con = getConnection();
-			$dbh = $con->prepare("UPDATE books SET title = ?, isbn= ?, author = ?, created_at = NOW() WHERE id = ?");
-			$dbh->bindParam(1,$title);
-			$dbh->bindParam(2,$isbn);
-			$dbh->bindParam(3,$author);
-			$dbh->bindParam(4,$id);
-			$dbh->execute();
- 	    	$con = null;
- 	    	$app->response->headers->set("Content-type","application/json");
- 	    	$app->response->setStatus(200);
- 	    	$app->response->body(json_encode(array("res"=>1)));
-		} catch (PDOException $e) {
-			echo "Error: ".$e->getMessage();
-		}
+	$app->get('/searchProductbyname/', function() use($app) 
+	{
+		// Tomando los datos
+		$data    = $app->request->get();
+		$product = $data['name'];
+		$suplier = $data['proveedor'];
+		// Verificando que no existe el usuario
+		$searchProduct = searchProductbyname($product,$suplier);
+		$amountProduct = count($searchProduct['info']);
+		$productFinded = array("info"=>$amountProduct,"error"=>$searchProduct['error'] ,"mensaje"=>$searchProduct['mensaje']);
+		
+		$app->response->headers->set("Content-type","application/json");
+ 	    $app->response->setStatus(200);
+ 	    $app->response->body(json_encode($productFinded));
+	});
+
+	$app->post("/RegisterProduct/", function() use($app){
+		$product = $app->request->post();
+		// Registrando al producto
+		$data   = RegistrarProducto($product);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
 	});
 
 	$app->delete("/books/:id",function ($id) use($app){

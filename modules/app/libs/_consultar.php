@@ -106,6 +106,13 @@
 			return $datos;
 		}
 
+		function _GetProductByName($name,$proveedor)
+		{
+			$query = 'SELECT * FROM productos WHERE nb_producto = ? AND id_proveedor = ?';
+			$data = $this->EjecuteQueryTwoParam($query,$name,$proveedor);
+			return $data;
+		}
+
 		function EjecuteQueryOneParam($query,$param)
 		{
 			$error   = 0;
@@ -126,6 +133,29 @@
 			$datos = array("info"=>$info,"error"=>$error,"mensaje"=>$mensaje);
 			return $datos;
 		}
+
+		function EjecuteQueryTwoParam($query,$param,$param2)
+		{
+			$error   = 0;
+			$mensaje = "";
+			$info    = "";
+			R::freeze(1);
+			R::begin();
+			    try{
+			       $info = R::getAll($query,[$param,$param2]);
+			        R::commit();
+			    }
+			    catch(Exception $e) {
+			       $info    =  R::rollback();
+			       $error   = 1;
+			       $mensaje = $e->getMessage();
+			    }
+			R::close();
+			$datos = array("info"=>$info,"error"=>$error,"mensaje"=>$mensaje);
+			return $datos;
+		}
+
+
 
 	}//Consultar
  ?>

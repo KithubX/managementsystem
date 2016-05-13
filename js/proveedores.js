@@ -1,5 +1,12 @@
 var app = angular.module("appProveedores",['ui.router','toaster','ngAnimate','angularSpinner','jcs-autoValidate','ngBootbox','angularUtils.directives.dirPagination','ui.bootstrap']);
 
+app.filter('PriceFilter',function(){
+	return function(input,param){;
+		console.log(input);
+		console.log(param);
+	}
+});
+
 app.service("ProductService",function($http,$state,$ngBootbox,toaster){
 	var self = {
 		"isLoading":false,
@@ -9,7 +16,72 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster){
 		"search":null,
 		"selectedProduct":null,
 		"screenLocation":null,
-		"suplregister":null,
+		"productRegister":null,
+		"ValidateProduct":function(name,proveedor){
+			return $http.get("http://localhost/managementsystem/modules/index.php/searchProductbyname",{params:{name:name,proveedor:proveedor}})
+		},
+		"GoProducts":function(){
+			$state.go("productos");
+		},
+		"saveProduct":function(product){
+			console.log(product);
+			if(!self.isLoading)
+			{
+				self.isLoading = true;
+				self.ValidateProduct(product.nb_producto,product.id_proveedor).then(
+					function(response)
+					{
+						console.log(response);
+						var amount = (self.screenLocation=="Add")?response.data.info:0;
+						if(amount==0)
+						{	
+							// Verificando si se edita o se guarda
+			 				var send_method = (self.screenLocation=="Add")?"post":"put";
+			 				var url_method  = (self.screenLocation=="Add")?"RegisterProduct":"EditProduct";
+			 				var messageEnd  = (self.screenLocation=="Add")?"Producto Registrado!":"Product Editado";
+			 				var product_id  = (product.id!=undefined)?product.id:0;
+			 				//Registrando al usuario.
+			 				$http({method: send_method,url:"http://localhost/managementsystem/modules/index.php/"+url_method,
+								data: $.param({"nb_producto":product.nb_producto,"desc_producto":product.desc_producto,"num_precio":product.num_precio,"id_proveedor":product.id_proveedor,"product_id":product_id}), 
+							  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							})
+							 .then(
+							 	function(response){
+							 		console.log(response);
+							 		var Data = response.data;
+							 		if(Data.error != 1){
+							 			self.isLoading = false;
+							 			self.productRegister = [];
+							 			toaster.pop('success',messageEnd);	
+							 			
+							   		}else{
+							   			self.error     = true;
+							 			self.isLoading = false;
+							   			toaster.pop('error',Data.mensaje);	
+							   		}
+							   		//self.usersType = data;
+							 	},
+							 	function(data){
+							 		//self.error     = true;
+							 		self.isLoading = false;
+							 		toaster.pop('error',data.statusText);	
+							 	}
+							 )
+						}else{
+							self.isLoading = false;
+				 			toaster.pop('error',"Este producto ya está registrado para este proveedor.")
+						}
+					},
+					function(data)
+					{
+						//self.error     = true;
+				 		self.isLoading = false;
+				 		toaster.pop('error',data.statusText);
+					}
+
+				);
+			}
+		},
 		"DeleteProduct":function(Product){
 			if(Product==null)
 			{
@@ -274,7 +346,7 @@ app.controller("editSuplierController",function($scope,ProveedoresService,$state
 	);
 });
 
-app.controller("productosController",function($scope,$http,ProductService){
+app.controller("productosController",function($scope,$http,ProductService,$state){
 	$scope.ProductService = ProductService;
 	$scope.currentPage    = 1; // Página actual, para paginación
 	$scope.pageSize 	  = 5; // Tamaño de la página, para paginación.
@@ -287,5 +359,24 @@ app.controller("productosController",function($scope,$http,ProductService){
 				ProductService.selectedProduct = null;
 			}else{ProductService.selectedProduct = product;}
 	}
+
+	$scope.RedirectAdd = function()
+	{
+		$state.go("addproduct");
+	}
 });
 
+app.controller("addproductController",function($scope,$http,ProductService,ProveedoresService){
+	$scope.ProductService     = ProductService;
+	$scope.ProveedoresService = ProveedoresService;
+	$scope.title 			  = "Registrar Productos";
+	$scope.ProductService.screenLocation = "Add";
+	// Obteniendo los proveedores
+	$scope.ProveedoresService.GetSupliers();
+});
+
+app.controller("editProductController",function($scope,$http,ProductService,ProveedoresService){
+	$scope.ProductService     = ProductService;
+	$scope.ProveedoresService = ProveedoresService;
+	$scope.title 			  = "Registrar Productos";
+});

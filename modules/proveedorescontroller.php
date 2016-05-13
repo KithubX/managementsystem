@@ -55,4 +55,18 @@
 		$suplier  = $model->EliminarProducto();
 		return $suplier;
 	}
+
+	function searchProductbyname($name,$proveedor)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->searchProductbyname($name,$proveedor);
+		return $suplier;
+	}
+
+	function RegistrarProducto($product)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->registerProduct($product);
+		return $suplier;
+	}
  ?>

@@ -300,6 +300,11 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/productos/:id',
 		templateUrl:'templates/productos.html',
 		controller:'productosController'	
+	})
+	.state('addproduct',{
+		url:'/addproduct/:id',
+		templateUrl:'templates/productform.html',
+		controller:'addproductController'	
 	});
 
 	$urlRouterProvider.otherwise('/');

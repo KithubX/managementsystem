@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2016-05-12 16:42:21
+Date: 2016-05-13 16:11:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,14 +25,16 @@ CREATE TABLE `productos` (
   `desc_producto` varchar(255) DEFAULT NULL,
   `num_precio` varchar(255) DEFAULT NULL,
   `id_proveedor` int(11) DEFAULT NULL,
+  `sn_activo` int(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of productos
 -- ----------------------------
-INSERT INTO `productos` VALUES ('1', 'Carne', 'Carne deliciosa', '100', '1');
-INSERT INTO `productos` VALUES ('2', 'Sirloin', 'Sirloin Delicioso', '200', '1');
+INSERT INTO `productos` VALUES ('1', 'Carne', 'Carne deliciosa', '100', '1', '1');
+INSERT INTO `productos` VALUES ('2', 'Sirloin', 'Sirloin Delicioso', '200', '1', '1');
+INSERT INTO `productos` VALUES ('10', 'Carne', 'adsa', '23', '2', '1');
 
 -- ----------------------------
 -- Table structure for proveedores
