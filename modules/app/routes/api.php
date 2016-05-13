@@ -316,8 +316,56 @@
     	$app->response->body(json_encode($datos));
 	});
 
-	//
-	
+	// Urls de productos de los proveedores.
+	$app->get('/getProducts/', function() use($app) 
+	{
+ 	    	$data  = GetProducts();
+ 	    	$error      = $data['error'];
+ 	    	$app->response->headers->set("Content-type","application/json");
+ 	    	$app->response->setStatus(200);
+ 	    	if($error==1)
+	    	{
+	    		$datos = $data['mensaje'];
+	    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+	    	}
+	    	else
+	    	{
+	    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+	    	}
+ 	    	
+ 	    	$app->response->body(json_encode($datos));
+ 	   	
+	});
+
+	$app->get("/deleteProduct/", function() use($app){
+		$suplier = $app->request->get();
+		$id   = $suplier['Product'];
+		$data = EliminarProducto($id);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		// Buscando los usuarios restantes.
+    		$users      = GetSupliers();
+ 	    	$error      = $users['error'];
+ 	    	if($error!=0)
+ 	    	{
+ 	    		$info = "";
+ 	    	}else{$info = $users['info'];}
+    		$datos = array("info"=>$info,"error"=>$error ,"mensaje"=>$users['mensaje']);
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
 	$app->put("/books/",function() use($app){
 		$id     = $app->request->put("id");
 		$title  = $app->request->put("title");

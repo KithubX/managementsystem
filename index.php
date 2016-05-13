@@ -57,7 +57,7 @@
                         <a uib-dropdown-toggle>Proveedores <span class="caret"></span></a>
                         <ul uib-dropdown-menu>
                             <li role="presentation"><a ui-sref="proveedores">Proveedores </a></li>
-                            <li role="presentation"><a ui-sref="beautiful">Productos</a></li>
+                            <li role="presentation"><a ui-sref="productos">Productos</a></li>
                             <li role="presentation" class="active"><a href="logout.php">Compras </a></li>
                         </ul>
                     </li>

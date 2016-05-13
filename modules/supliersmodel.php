@@ -63,6 +63,26 @@
 			$datos = $userModel->StoreObject($suplier);
 			return $datos;
 		}
+
+		function GetProducts()
+		{
+			$consultar = new Consultar();
+			$products  = $consultar->_GetProducts();
+			return $products;	
+		}
+
+		function EliminarProducto($id)
+		{
+			$userModel = new UsersModel();
+
+			$Productload = R::load("products",$id);
+			
+			// Editando las propiedades
+			$Productload->sn_activo = 0;
+			// almacenando el usuario
+			$datos = $userModel->StoreObject($Productload);
+			return $datos;
+		}
 	}
 	
 

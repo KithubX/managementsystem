@@ -41,4 +41,18 @@
 		$suplier  = $model->EditarProveedor($suplier);
 		return $suplier;
 	}
+
+	function GetProducts()
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->GetProducts();
+		return $suplier;
+	}
+
+	function EliminarProducto($id)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->EliminarProducto();
+		return $suplier;
+	}
  ?>

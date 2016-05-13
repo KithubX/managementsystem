@@ -1,5 +1,5 @@
 <div class="col-md-12" ng-if="UsersService.error!=true">
-	<cc-spinner is-loading="ProveedoresService.isLoading" message="Loading"></cc-spinner>
+	<cc-spinner is-loading="ProductService.isLoading" message="Loading"></cc-spinner>
 	<div class="UsersContainer" ng-if="!UsersService.isLoading">
 		<div class="col-md-12 Filtros pleft">
 	    <div class="row">
@@ -16,18 +16,18 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th class="text-center">Proveedor</th>
+				<th class="text-center">Producto</th>
 				<th class="text-center">Descripción</th>
-				<th class="text-center">Dirección</th>
-				<th class="text-center">Téléfono</th>
+				<th class="text-center">Proveedor</th>
+				<th class="text-center">Precio</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="text-center" dir-paginate="prov in ProveedoresService.proveedores | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':prov.id == ProveedoresService.selectedSuplier.id}" ng-click="SelectSuplier(prov)">
-				<td>{{prov.nb_proveedor}}</td>
-				<td>{{prov.desc_proveedor}}</td>
-				<td>{{prov.desc_address}}</td>
-				<td>{{prov.num_telefono}}</td>
+			<tr class="text-center" dir-paginate="prod in ProductService.products | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':prod.id == ProductService.selectedProduct.id}" ng-click="SelectProduct(prod)">
+				<td>{{prod.nb_producto}}</td>
+				<td>{{prod.desc_producto}}</td>
+				<td>{{prod.nb_proveedor}}</td>
+				<td>{{prod.num_precio}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -41,10 +41,10 @@
 				<button class="btn btn-success" ng-click="RedirectAdd()">Agregar</button>
 			</div>
 			<div class="col-md-3 BtnContent">
-				<button class="btn btn-warning" ng-click="RedirectEdit(ProveedoresService.selectedSuplier.id)">Editar</button>
+				<button class="btn btn-warning" ng-click="RedirectEdit(ProductService.selectedProduct.id)">Editar</button>
 			</div>
 			<div class="col-md-3 BtnContent">
-				<button class="btn btn-danger" ng-click="ProveedoresService.DeleteSuplier(ProveedoresService.selectedSuplier)" >Eliminar</button>
+				<button class="btn btn-danger" ng-click="ProductService.DeleteProduct(ProductService.selectedProduct)" >Eliminar</button>
 			</div>
 		</div>
 		

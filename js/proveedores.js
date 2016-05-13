@@ -4,12 +4,73 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster){
 	var self = {
 		"isLoading":false,
 		"ordering":"name",
-		"proveedores":[],
+		"products":[],
 		"error":false,
 		"search":null,
-		"selectedSuplier":null,
+		"selectedProduct":null,
 		"screenLocation":null,
-		"suplregister":null
+		"suplregister":null,
+		"DeleteProduct":function(Product){
+			if(Product==null)
+			{
+				toaster.pop('error',"Favor de seleccionar un producto");	
+			}else{
+				$ngBootbox.confirm('¿Desea eliminar el producto: '+Product.nb_producto+'?')
+			    .then(function() {
+			        // DEleting the user.
+			        //self.isLoading = true;
+			       $http.get("http://localhost/managementsystem/modules/index.php/deleteProduct",{params:{Product:Product.id}}).then(
+					 	function(response){
+					 		self.isLoading = false;
+					 		var error = response.data.error;
+					 		if(error!=1)
+					 		{
+					 			toaster.pop('success',"Producto eliminado");
+					 			console.log(response.data);
+					 			self.proveedores = response.data.info;
+					 		}else{toaster.pop('error',response.data.mensaje);	}
+					 	},
+					 	function(data){
+					 		self.error     = true;
+					 		self.isLoading = false;
+					 		toaster.pop('error',data.statusText);	
+					 	}
+					 )
+			    }, function() {
+			        console.log('Confirm dismissed!');
+			    });
+			}
+		},
+		"GetProducts":function(){
+			if(!self.isLoading)
+			{
+				self.isLoading = true;
+				$http({method: "get",url:"http://localhost/managementsystem/modules/index.php/getProducts",data: $.param({}), 
+				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				})
+				 .then(
+				 	function(response){
+				 		
+				 		var Data = response.data;
+				 		if(Data.error != 1){
+				 			self.isLoading = false;
+				   			self.products = Data.info;
+				   			console.log(self.products);
+				   		}else{
+				   			self.error     = true;
+				 			self.isLoading = false;
+				   			toaster.pop('error',Data.mensaje);	
+				   		}
+				   		//self.usersType = data;
+				 	},
+				 	function(data){
+				 		self.error     = true;
+				 		self.isLoading = false;
+				 		toaster.pop('error',data.statusText);	
+				 	}
+				 )
+			}
+		}
 	};
 	return self;
 });
@@ -107,6 +168,7 @@ app.service("ProveedoresService",function($http,$state,$ngBootbox,toaster){
 					 		{
 					 			console.log(response.data);
 					 			self.proveedores = response.data.info;
+					 			toaster.pop('success',"Proveedor eliminado");
 					 		}else{toaster.pop('error',response.data.mensaje);	}
 					 	},
 					 	function(data){
@@ -212,7 +274,18 @@ app.controller("editSuplierController",function($scope,ProveedoresService,$state
 	);
 });
 
-app.controller("productosController",function($scope,$http){
-	alert("holis");
+app.controller("productosController",function($scope,$http,ProductService){
+	$scope.ProductService = ProductService;
+	$scope.currentPage    = 1; // Página actual, para paginación
+	$scope.pageSize 	  = 5; // Tamaño de la página, para paginación.
+	$scope.ProductService.GetProducts();
+
+	$scope.SelectProduct = function(product)
+	{
+		if(ProductService.selectedProduct == product)
+			{
+				ProductService.selectedProduct = null;
+			}else{ProductService.selectedProduct = product;}
+	}
 });
 
