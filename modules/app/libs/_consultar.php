@@ -85,6 +85,44 @@
 			return $productos;
 		}
 
+		function _GetProductByName($name,$proveedor)
+		{
+			$query = 'SELECT * FROM productos WHERE nb_producto = ? AND id_proveedor = ?';
+			$data = $this->EjecuteQueryTwoParam($query,$name,$proveedor);
+			return $data;
+		}
+
+		function _ProductById($id)
+		{
+			$query = '
+				SELECT * FROM productos where id = ?
+			';
+			$data = $this->EjecuteQueryOneParam($query,$id);
+			return $data;
+		}
+
+		function _getBuysByDate($dates)
+		{
+			$start = $dates['dateStart'];
+			$end   = $dates['dateEnd'];
+			$query = "
+				select  
+				com.id,
+				com.id_producto,
+				com.id_proveedor,
+				com.num_cantidad,
+				com.num_total,
+				DATE(com.fec_compra) as fec_compra,
+				prov.nb_proveedor
+				from compras com
+				inner join proveedores prov
+				ON prov.id = com.id_proveedor
+				where fec_compra >= ? and fec_compra <= ?
+			";
+			$data = $this->EjecuteQueryTwoParam($query,$start,$end);
+			return $data;
+		}
+
 		function Ejecutarconsulta($query)
 		{
 			$error   = 0;
@@ -106,12 +144,6 @@
 			return $datos;
 		}
 
-		function _GetProductByName($name,$proveedor)
-		{
-			$query = 'SELECT * FROM productos WHERE nb_producto = ? AND id_proveedor = ?';
-			$data = $this->EjecuteQueryTwoParam($query,$name,$proveedor);
-			return $data;
-		}
 
 		function EjecuteQueryOneParam($query,$param)
 		{
@@ -154,7 +186,6 @@
 			$datos = array("info"=>$info,"error"=>$error,"mensaje"=>$mensaje);
 			return $datos;
 		}
-
 
 
 	}//Consultar

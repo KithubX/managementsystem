@@ -1,24 +1,24 @@
 <div class="col-md-12">
 	<cc-spinner is-loading="ProveedoresService.isLoading" message="Loading"></cc-spinner>
-    <div class="RegisterContainer clearfix" ng-if="ProveedoresService.error!=true && ProveedoresService.isLoading == false ">
+    <div class="RegisterContainer clearfix" ng-show="ProveedoresService.error!=true && ProveedoresService.isLoading == false ">
     	<h3 class="text-center">{{title}}</h3>
-   		<form  class="form" novalidate ng-submit="ProveedoresService.SaveSuplier(suplregister)">
+   		<form  class="form" novalidate ng-submit="ProveedoresService.SaveSuplier(ProveedoresService.suplregister)">
 	    	<div class="row">
 	    		<div class="form-group col-md-12">
    		    		<label for="">Nombre: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="suplregister.nb_proveedor" name="name" required ng-pattern="/^[a-z\s]{1,60}$/i" ng-pattern-err-type="badPattern">
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProveedoresService.suplregister.nb_proveedor" name="name" required ng-pattern="/^[a-z\s]{1,60}$/i" ng-pattern-err-type="badPattern">
    		    	</div>
    		    	<div class="form-group col-md-12">
    		    		<label for="">Descripción: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="suplregister.desc_proveedor" name="name" required ng-pattern="/^[a-z\s\.\,]{1,200}$/i" ng-pattern-err-type="badPattern">
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProveedoresService.suplregister.desc_proveedor" name="name" required ng-pattern="/^[a-z\s\.\,]{1,200}$/i" ng-pattern-err-type="badPattern">
    		    	</div>2
 				<div class="form-group col-md-12">
    		    		<label for="">Dirección: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="suplregister.desc_address" name="name" required ng-pattern="/^[a-z\s\.\,]{1,60}$/i" ng-pattern-err-type="badPattern">
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProveedoresService.suplregister.desc_address" name="name" required ng-pattern="/^[a-z\s\.\,]{1,60}$/i" ng-pattern-err-type="badPattern">
    		    	</div>
    		    	<div class="form-group col-md-12">
    		    		<label for="">Téléfono: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre de usuario..." ng-model="suplregister.num_telefono" name="user" required ng-pattern="/^[0-9-]{1,30}$/i" ng-pattern-err-type="badPattern" >
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre de usuario..." ng-model="ProveedoresService.suplregister.num_telefono" name="user" required ng-pattern="/^[0-9-]{1,30}$/i" ng-pattern-err-type="badPattern" >
    		    	</div>
 
    		    	<div class="form-group col-md-12">

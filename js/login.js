@@ -13,14 +13,13 @@ app.controller("LoginController",function($scope,$http,toaster){
 		$scope.user.Action = "CheckUser";
 		var params         = JSON.stringify($scope.user);
 		// enviando la petición
-		console.log($scope.user.password);
-		$http.get("http://localhost/management/modules/index.php/login",{params:{name:$scope.user.name,password:$scope.user.password}})
+		$http.get("http://localhost/managementsystem/modules/index.php/login",{params:{name:$scope.user.name,password:$scope.user.password}})
 				 .success(function(data, status, headers, config) 
 				 {          	
 				   		$scope.isLoading = false;
 				   		if(!data.error)
 				   		{
-				   			if(data.info.length>0)
+				   			if(data.info>0)
 				   			{
 				   				toaster.pop('success',"Welcome Sweetie :D");
 				   				$scope.imageprofile = "css/img/mainbepa.jpg"

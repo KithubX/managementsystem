@@ -1,16 +1,16 @@
 <?php 
 	$conexion   = new ConexionBean(); //Variable de conexión
 	$con        = $conexion->_con(); //Variable de conexión
-	
-	
+	session_cache_limiter(false);
+	session_start();
 	function CheckUser($user,$pass)
 	{
 		$query  = "SELECT * FROM users WHERE nb_user= ? AND pw_password = ?"; 
 		$result = tranDoubleParam($query,$user,$pass);
-		$amount = count($result['clientes']);
+		$amount = count($result['info']);
 		if($amount>0)
 		{
-			$user 		         = $result['clientes'][0];
+			$user 		         = $result['info'][0];
 			$_SESSION["user"]    = $user['nb_user'];
 			$_SESSION["id_user"] = $user['id'];
 		}
@@ -69,22 +69,22 @@
 
 	function tranDoubleParam($query,$param,$param2)
 		{
-			$clientes = "";
 			$error   = 0;
 			$msj = "";
 			$info    = "";
+			R::freeze(1);
 			R::begin();
 			    try{
-			       $clientes = R::getAll($query,[$param,$param2]);
+			       $info = R::getAll($query,[$param,$param2]);
 			        R::commit();
 			    }
 			    catch(Exception $e) {
 			       $msj   = $e->getMessage();
 			       $error = true;
-			       $clientes =  R::rollback();
+			       $info =  R::rollback();
 			    }
 			R::close();
-			$datos = array("clientes"=>$clientes,"error"=>$error,"msj"=>$msj);
+			$datos = array("info"=>$info,"error"=>$error,"msj"=>$msj);
 			return $datos;
 		}
 

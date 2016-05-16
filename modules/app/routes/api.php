@@ -16,7 +16,7 @@
  	    	// Verificando si hay error
  	    	if($datos['error']!=1)
  	    	{	
- 	    		$datos = array("info"=>['clientes'],"error"=>0,"mensaje"=>"");
+ 	    		$datos = array("info"=>count($datos['info']),"error"=>0,"mensaje"=>"");
  	    	}else{
  	    		$datos = $datos['mensaje'];
  	    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$datos["msj"]);
@@ -403,6 +403,73 @@
     	$app->response->body(json_encode($datos));
 	});
 
+	$app->put("/EditProduct/", function() use($app){
+		$product = $app->request->post();
+		// Registrando al producto
+		$data   = EditarProducto($product);
+		$error          = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	});
+
+	$app->get('/searchProductById/', function() use($app) 
+	{
+		// Tomando los datos
+		$params    = $app->request->get();
+		$id        = $params['id'];
+
+		// Buscando el usuario por id.
+		$data      = ProductById($id);
+		$error      = $data['error'];
+    	$app->response->headers->set("Content-type","application/json");
+    	$app->response->setStatus(200);
+    	if($error==1)
+    	{
+    		$datos = $data['mensaje'];
+    		$datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+    	}
+    	else
+    	{
+    		$datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+    	}
+    	
+    	$app->response->body(json_encode($datos));
+	}); 
+
+    $app->get('/getBuys/', function() use($app) 
+    {
+        // Tomando los datos
+        $params    = $app->request->get();
+        $data      = GetBuysByDate($params);
+        $error     = $data['error'];
+        $app->response->headers->set("Content-type","application/json");
+        $app->response->setStatus(200);
+        if($error==1)
+        {
+            $datos = $data['mensaje'];
+            $datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+        }
+        else
+        {
+            $datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+        }
+        
+        $app->response->body(json_encode($datos));
+    }); 
 	$app->delete("/books/:id",function ($id) use($app){
 		
 		try 

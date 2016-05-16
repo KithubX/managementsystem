@@ -3,6 +3,7 @@
     $user = $_SESSION['user'];
     if(!$user !="")
     {
+        
         header ("Location: login.html");
     }
  ?>
@@ -22,6 +23,7 @@
     <link rel="stylesheet" href="css/Hero-Technology.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/toaster.min.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
     <script src="js/angular.min.js"></script>
     <script src="js/ladda.min.js"></script>
     <script src="js/angular-ladda.js"></script>
@@ -58,7 +60,7 @@
                         <ul uib-dropdown-menu>
                             <li role="presentation"><a ui-sref="proveedores">Proveedores </a></li>
                             <li role="presentation"><a ui-sref="productos">Productos</a></li>
-                            <li role="presentation" class="active"><a href="logout.php">Compras </a></li>
+                            <li role="presentation" class="active"><a ui-sref="buys">Compras </a></li>
                         </ul>
                     </li>
                 </ul>

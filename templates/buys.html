@@ -1,0 +1,44 @@
+<div class="col-md-12">
+<cc-spinner is-loading="buysService.isLoading" message="Loading"></cc-spinner>
+	 <div class="row" ng-if="!buysService.isLoading">
+	 	<h2 class="text-center">Compras</h2>
+	 	<p class="text-center lead">Elija los rangos de fecha de las compras efectuadas</p>
+	 	<div class="col-md-10 col-md-offset-1 DatesForm">
+	 		<form ng-submit="buysService.FindBuys(buysService.searchDates)"> 
+	 			<div class="col-md-6 form-group">
+		 			<h4 class="text-center">Inicio</h4>
+		 			<div class="date-container">
+		 				<uib-datepicker ng-model="buysService.searchDates.start" class="well well-sm" datepicker-options="options"></uib-datepicker>
+		 			</div>
+		 		
+		 		</div>
+		 		<div class="col-md-6 form-group">
+		 			<h4 class="text-center">Fin</h4>
+		 			<div class="date-container">
+		 				<uib-datepicker ng-model="buysService.searchDates.end" class="well well-sm" datepicker-options="options"></uib-datepicker>
+		 			</div>
+		 		</div>
+		 		<div class="sendBtn">
+		 			<div class="btnFind">
+		 				<button class="btn btn-success btn-block" type="submit">Buscar</button>
+		 			</div>
+		 			
+		 		</div>
+	 		</form>
+	 	</div>
+	 </div>
+	 <div class="col-md-12">
+			<div class="col-md-5 buttons">
+				<div class="col-md-3 BtnContent">
+					<button class="btn btn-success" ng-click="RedirectAdd()">Agregar</button>
+				</div>
+				<div class="col-md-3 BtnContent">
+					<button class="btn btn-warning" ng-click="RedirectEdit(ProveedoresService.selectedSuplier.id)">Editar</button>
+				</div>
+				<div class="col-md-3 BtnContent">
+					<button class="btn btn-danger" ng-click="ProveedoresService.DeleteSuplier(ProveedoresService.selectedSuplier)" >Eliminar</button>
+				</div>
+			</div>
+			
+		</div>
+</div>

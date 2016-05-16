@@ -7,7 +7,7 @@ app.filter('PriceFilter',function(){
 	}
 });
 
-app.service("ProductService",function($http,$state,$ngBootbox,toaster){
+app.service("buysService",function($http,$state,$ngBootbox,toaster){
 	var self = {
 		"isLoading":false,
 		"ordering":"name",
@@ -17,6 +17,63 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster){
 		"selectedProduct":null,
 		"screenLocation":null,
 		"productRegister":null,
+		"formModified":false,
+		"searchDates":null,
+		"FindBuys":function(dates){
+			if(dates!=null)
+			{
+				if(dates.start!=null && dates.end!= null)
+				{
+					var start = dates.start.toISOString().slice(0,10).replace(/-/g,"-")
+					var end   = dates.end.toISOString().slice(0,10).replace(/-/g,"-")
+					if(!self.isLoading)
+					{
+						self.isLoading = true;
+						 $http.get("http://localhost/managementsystem/modules/index.php/getBuys",{params:{dateStart:start,dateEnd:end}}).then(
+						 	function(response){
+						 		
+						 		var Data = response.data;
+						 		if(Data.error != 1){
+						 			self.isLoading = false;
+						   			if(Data.info.length>0)
+						   			{
+						   				alert("compras!");
+						   			}else{toaster.pop('error',"No hay compras en ese rango de fechas");}
+						   		}else{
+						   			self.error     = true;
+						 			self.isLoading = false;
+						   			toaster.pop('error',Data.mensaje);	
+						   		}
+						   		//self.usersType = data;
+						 	},
+						 	function(data){
+						 		self.error     = true;
+						 		self.isLoading = false;
+						 		toaster.pop('error',data.statusText);	
+						 	}
+						 )
+					}
+				}else{toaster.pop('error',"Favor de llenar ambas fechas");}
+			}else{
+				toaster.pop('error',"Favor de llenar ambas fechas");	
+			}
+		}
+
+	};
+	return self;
+});
+
+app.service("ProductService",function($http,$state,$ngBootbox,toaster,$rootScope){
+	var self = {
+		"isLoading":false,
+		"ordering":"name",
+		"products":[],
+		"error":false,
+		"search":null,
+		"selectedProduct":null,
+		"screenLocation":null,
+		"productRegister":null,
+		"formModified":false,
 		"ValidateProduct":function(name,proveedor){
 			return $http.get("http://localhost/managementsystem/modules/index.php/searchProductbyname",{params:{name:name,proveedor:proveedor}})
 		},
@@ -24,8 +81,7 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster){
 			$state.go("productos");
 		},
 		"saveProduct":function(product){
-			console.log(product);
-			if(!self.isLoading)
+			if(!self.isLoading && product !=null)
 			{
 				self.isLoading = true;
 				self.ValidateProduct(product.nb_producto,product.id_proveedor).then(
@@ -51,7 +107,7 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster){
 							 		var Data = response.data;
 							 		if(Data.error != 1){
 							 			self.isLoading = false;
-							 			self.productRegister = [];
+							 			self.formModified = true;
 							 			toaster.pop('success',messageEnd);	
 							 			
 							   		}else{
@@ -160,6 +216,7 @@ app.service("ProveedoresService",function($http,$state,$ngBootbox,toaster){
 		"selectedSuplier":null,
 		"screenLocation":null,
 		"suplregister":null,
+		"formModified":false,
 		"GoSupliers":function(){
 			$state.go("proveedores");
 		},	
@@ -191,9 +248,10 @@ app.service("ProveedoresService",function($http,$state,$ngBootbox,toaster){
 							 		console.log(response);
 							 		var Data = response.data;
 							 		if(Data.error != 1){
-							 			self.isLoading = false;
+							 			self.isLoading    = false;
+							 			self.formModified = true;
 							 			toaster.pop('success',messageEnd);	
-							 			self.suplregister = [];
+							 			self.suplregister = (self.screenLocation=="Add")?[]:self.suplregister;
 
 							   		}else{
 							   			self.error     = true;
@@ -324,6 +382,14 @@ app.controller("RegisterSuplierController",function($scope,ProveedoresService){
 	$scope.ProveedoresService = ProveedoresService;
 	$scope.ProveedoresService.screenLocation = "Add";
 	$scope.suplregister       = $scope.ProveedoresService.suplregister;
+	$scope.$watch("ProveedoresService.formModified",function(){
+		if(ProveedoresService.formModified==true)
+		{
+			$scope.suplierForm.$setPristine();
+			$scope.ProveedoresService.suplregister = [];
+			ProveedoresService.formModified = false;
+		}
+	});
 });
 
 app.controller("editSuplierController",function($scope,ProveedoresService,$stateParams,$http,toaster){
@@ -336,8 +402,7 @@ app.controller("editSuplierController",function($scope,ProveedoresService,$state
 		function (response)
 		{
 	 		$scope.ProveedoresService.isLoading = false;
-	 		$scope.suplregister = response.data.info[0];
-	 		console.log($scope.userRegister);
+	 		$scope.ProveedoresService.suplregister = response.data.info[0];
 	 	},
 	 	function(data){
 	 		self.error = true;
@@ -346,7 +411,7 @@ app.controller("editSuplierController",function($scope,ProveedoresService,$state
 	);
 });
 
-app.controller("productosController",function($scope,$http,ProductService,$state){
+app.controller("productosController",function($scope,$http,ProductService,$state,toaster){
 	$scope.ProductService = ProductService;
 	$scope.currentPage    = 1; // Página actual, para paginación
 	$scope.pageSize 	  = 5; // Tamaño de la página, para paginación.
@@ -364,6 +429,16 @@ app.controller("productosController",function($scope,$http,ProductService,$state
 	{
 		$state.go("addproduct");
 	}
+
+	$scope.RedirectEdit = function(id)
+	{
+		if(id==undefined)
+		{
+			toaster.pop('error',"Favor de seleccionar un Producto");	
+		}else{
+			$state.go("editProduct",{id:id});
+		}
+	}
 });
 
 app.controller("addproductController",function($scope,$http,ProductService,ProveedoresService){
@@ -373,10 +448,47 @@ app.controller("addproductController",function($scope,$http,ProductService,Prove
 	$scope.ProductService.screenLocation = "Add";
 	// Obteniendo los proveedores
 	$scope.ProveedoresService.GetSupliers();
+	$scope.formModified = $scope.ProductService.formModified;
+	$scope.$watch("ProductService.formModified",function(){
+		if(ProductService.formModified==true)
+		{
+			$scope.productForm.$setPristine();
+			$scope.ProductService.productRegister = [];
+			ProductService.formModified = false;
+		}
+	});	
 });
 
 app.controller("editProductController",function($scope,$http,ProductService,ProveedoresService){
 	$scope.ProductService     = ProductService;
 	$scope.ProveedoresService = ProveedoresService;
 	$scope.title 			  = "Registrar Productos";
+});
+
+app.controller("editProductController",function($scope,$http,ProductService,ProveedoresService,toaster,$stateParams){
+$scope.id_Product      	  = $stateParams.id;
+$scope.ProductService     = ProductService;
+$scope.ProveedoresService = ProveedoresService;
+$scope.ProductService.isLoading = true;
+$scope.ProveedoresService.GetSupliers();
+$scope.formModified = $scope.ProductService.formModified;
+$http.get("http://localhost/managementsystem/modules/index.php/searchProductById",{params:{id:$scope.id_Product}}).then(
+		function (response)
+		{
+	 		$scope.ProductService.isLoading = false;
+	 		$scope.ProductService.productRegister = response.data.info[0];
+	 	},
+	 	function(data){
+	 		self.error = true;
+	 		toaster.pop('error',data.statusText);	
+	 	}
+	);
+});
+
+app.controller("productsController",function($scope,$http,toaster,buysService){
+	$scope.buysService = buysService;
+	  $scope.options = {
+	    minDate: new Date('dd-MMM-yyyy'),
+	    showWeeks: true
+	  };
 });

@@ -1,5 +1,6 @@
 <?php
- 
+
+
 require 'vendor/autoload.php';
 
 \Slim\Slim::registerAutoloader();
@@ -7,7 +8,6 @@ require 'vendor/autoload.php';
  $app = new \Slim\Slim();
 
 define ("SPECIALCONSTANT",true);
-session_start();
 
 require("app/libs/connect.php");
 require("userscontroller.php");

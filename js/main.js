@@ -40,6 +40,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 		"search":null,
 		"userRegister":null,
 		"ScreenLoc":null,
+		"formModified":false,
 		"GoUsers":function(){
 			$state.go("users");
 		},	
@@ -121,7 +122,8 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 									 		if(Data.error != 1){
 									 			self.isLoading = false;
 									 			toaster.pop('success',messageEnd);	
-									 			self.userRegister = [];
+									 			self.userRegister = (self.ScreenLoc=="add")?[]:self.userRegister;
+									 			self.formModified = true;
 
 									   		}else{
 									   			self.error     = true;
@@ -138,6 +140,7 @@ app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 									 )
 					 			}else{
 					 				toaster.pop('error',"Ese nombre de usuario ya existe, favor de usar otro.");	
+					 				self.isLoading = false;
 					 			}
 					   		}else{
 					   			self.error     = true;
@@ -305,40 +308,57 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/addproduct/:id',
 		templateUrl:'templates/productform.html',
 		controller:'addproductController'	
+	})
+	.state('editProduct',{
+		url:'/editProduct/:id',
+		templateUrl:'templates/productform.html',
+		controller:'editProductController'	
+	})
+	.state('buys',{
+		url:'/buys/',
+		templateUrl:'templates/buys.html',
+		controller:'productsController'	
 	});
 
 	$urlRouterProvider.otherwise('/');
 });
 
 app.controller("RegisterUserController",function($scope,usersService,$http,toaster,$state){
-	$scope.UsersService 		  = usersService;
-	$scope.UsersService.GetUsersType();
+	$scope.usersService 		  = usersService;
+	$scope.usersService.GetUsersType();
 	$scope.title        		  = "Registro de usuarios";
-	$scope.UsersService.ScreenLoc = "add";
-	$scope.types 				  = $scope.UsersService.usersType;
-	$scope.userRegister 		  = $scope.UsersService.userRegister;
+	$scope.usersService.ScreenLoc = "add";
+	$scope.types 				  = $scope.usersService.usersType;
+
+	$scope.$watch("usersService.formModified",function(){
+		if(usersService.formModified==true)
+		{
+			$scope.userForm.$setPristine();
+			$scope.usersService.userRegister = [];
+			$scope.usersService.formModified = false;
+		}
+	});
 		
 });
 
 app.controller("editUserController",function($scope,usersService,$http,toaster,$state,$stateParams){
-	$scope.UsersService 		  = usersService;
-	$scope.UsersService.GetUsersType();
+	$scope.usersService 		  = usersService;
+	$scope.usersService.GetUsersType();
 	$scope.title        		  = "Edición de usuarios";
-	$scope.UsersService.ScreenLoc = "edit";
+	$scope.usersService.ScreenLoc = "edit";
 	$scope.id_user      		  = $stateParams.id_user;
-	$scope.userRegister 		  = [];
-	$scope.types				  = $scope.UsersService.usersType;
+	$scope.types				  = $scope.usersService.usersType;
 
 
 
 	// Buscando por id el usuario
-	$scope.UsersService.isLoading = true;
+	$scope.usersService.isLoading = true;
 	$http.get("http://localhost/managementsystem/modules/index.php/searchUserById",{params:{id_user:$scope.id_user}}).then(
 		function (response)
 		{
-	 		$scope.UsersService.isLoading = false;
-	 		$scope.userRegister = response.data.info[0];
-	 		$scope.userRegister.pw_password = "";
+	 		$scope.usersService.isLoading = false;
+	 		$scope.usersService.userRegister = response.data.info[0];
+	 		$scope.usersService.userRegister.pw_password = "";
 	 		console.log($scope.userRegister);
 	 	},
 	 	function(data){

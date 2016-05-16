@@ -2,15 +2,15 @@
 	<cc-spinner is-loading="ProductService.isLoading" message="Loading"></cc-spinner>
     <div class="RegisterContainer clearfix" ng-show="ProductService.error!=true && ProductService.isLoading == false ">
     	<h3 class="text-center">{{title}}</h3>
-   		<form  class="form" novalidate ng-submit="ProductService.saveProduct(suplregister)">
+   		<form  class="form"  novalidate ng-submit="ProductService.saveProduct(ProductService.productRegister)" name="productForm">
 	    	<div class="row">
 	    		<div class="form-group col-md-12">
    		    		<label for="">Nombre: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProductService.productRegister.nb_producto" name="name" required ng-pattern="/^[a-z\s]{1,60}$/i" ng-pattern-err-type="badPattern">
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProductService.productRegister.nb_producto" name="name" required ng-pattern="/^[a-z\s\ñ]{1,60}$/i" ng-pattern-err-type="badPattern">
    		    	</div>
    		    	<div class="form-group col-md-12">
    		    		<label for="">Descripción: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProductService.productRegister.desc_producto" name="name" required ng-pattern="/^[a-z\s\.\,]{1,200}$/i" ng-pattern-err-type="badPattern">
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProductService.productRegister.desc_producto" name="name" required ng-pattern="/^[a-z\s\.\,\ñ]{1,200}$/i" ng-pattern-err-type="badPattern">
    		    	</div>2
 				<div class="form-group col-md-12">
    		    		<label for="">Precio: </label>
@@ -24,7 +24,7 @@
    		    	</div>
 
    		    	<div class="form-group col-md-12">
-   		    		<button class="btn btn-success Accept" type="submit" ng-click="ProductService.saveProduct(ProductService.productRegister)">Guardar</button>
+   		    		<button class="btn btn-success Accept" type="submit">Guardar</button>
    		    		<button class="btn btn-link Cancel"  type="button" ng-click="ProductService.GoProducts()">Cancelar</button>
    		    	</div>
 	    	</div><!-- r0w-->

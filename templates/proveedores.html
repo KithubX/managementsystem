@@ -1,55 +1,57 @@
-<div class="col-md-12" ng-if="UsersService.error!=true">
+<div class="col-md-12" ng-if="ProveedoresService.error!=true">
 	<cc-spinner is-loading="ProveedoresService.isLoading" message="Loading"></cc-spinner>
-	<div class="UsersContainer" ng-if="!UsersService.isLoading">
-		<div class="col-md-12 Filtros pleft">
-	    <div class="row">
-	        <div class="col-xs-4">
-	      <label for="search">Búsqueda:</label>
-	      <input ng-model="q" id="search" class="form-control" placeholder="Filtrado">
-	    </div>
-	    <div class="col-xs-2">
-	      <label for="search">Usuarios Por Página:</label>
-	      <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
-	    </div>
-	    </div><!-- row -->
-	</div><!-- filtros -->
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th class="text-center">Proveedor</th>
-				<th class="text-center">Descripción</th>
-				<th class="text-center">Dirección</th>
-				<th class="text-center">Téléfono</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="text-center" dir-paginate="prov in ProveedoresService.proveedores | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':prov.id == ProveedoresService.selectedSuplier.id}" ng-click="SelectSuplier(prov)">
-				<td>{{prov.nb_proveedor}}</td>
-				<td>{{prov.desc_proveedor}}</td>
-				<td>{{prov.desc_address}}</td>
-				<td>{{prov.num_telefono}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="SupliersService">
+		<div class="UsersContainer" ng-if="!ProveedoresService.isLoading">
+			<div class="col-md-12 Filtros pleft">
+		    <div class="row">
+		        <div class="col-xs-4">
+		      <label for="search">Búsqueda:</label>
+		      <input ng-model="q" id="search" class="form-control" placeholder="Filtrado">
+		    </div>
+		    <div class="col-xs-2">
+		      <label for="search">Usuarios Por Página:</label>
+		      <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+		    </div>
+		    </div><!-- row -->
+		</div><!-- filtros -->
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th class="text-center">Proveedor</th>
+					<th class="text-center">Descripción</th>
+					<th class="text-center">Dirección</th>
+					<th class="text-center">Téléfono</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-center" dir-paginate="prov in ProveedoresService.proveedores | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'selected':prov.id == ProveedoresService.selectedSuplier.id}" ng-click="SelectSuplier(prov)">
+					<td>{{prov.nb_proveedor}}</td>
+					<td>{{prov.desc_proveedor}}</td>
+					<td>{{prov.desc_address}}</td>
+					<td>{{prov.num_telefono}}</td>
+				</tr>
+			</tbody>
+		</table>
 
-	<div class="col-md-12">
-		<div class="text-center col-md-12">
-      		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
-       </div>
-		<div class="col-md-5 buttons">
-			<div class="col-md-3 BtnContent">
-				<button class="btn btn-success" ng-click="RedirectAdd()">Agregar</button>
+		<div class="col-md-12">
+			<div class="text-center col-md-12">
+	      		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+	       </div>
+			<div class="col-md-5 buttons">
+				<div class="col-md-3 BtnContent">
+					<button class="btn btn-success" ng-click="RedirectAdd()">Agregar</button>
+				</div>
+				<div class="col-md-3 BtnContent">
+					<button class="btn btn-warning" ng-click="RedirectEdit(ProveedoresService.selectedSuplier.id)">Editar</button>
+				</div>
+				<div class="col-md-3 BtnContent">
+					<button class="btn btn-danger" ng-click="ProveedoresService.DeleteSuplier(ProveedoresService.selectedSuplier)" >Eliminar</button>
+				</div>
 			</div>
-			<div class="col-md-3 BtnContent">
-				<button class="btn btn-warning" ng-click="RedirectEdit(ProveedoresService.selectedSuplier.id)">Editar</button>
-			</div>
-			<div class="col-md-3 BtnContent">
-				<button class="btn btn-danger" ng-click="ProveedoresService.DeleteSuplier(ProveedoresService.selectedSuplier)" >Eliminar</button>
-			</div>
+			
 		</div>
-		
-	</div>
-	</div><!-- /.UsersContainer -->
+		</div><!-- /.UsersContainer -->
+	</div><!-- /.SupliersService -->
 </div>
 
-<div class="error" ng-if="UsersService.error==true"></div>
+<div class="error" ng-if="ProveedoresService.error==true"></div>

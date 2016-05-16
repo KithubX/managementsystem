@@ -13,4 +13,9 @@
 
 .error { background: url("img/error.jpg") 50% 50% no-repeat; height: 200px; background-size: 100%; width: 503px; display: block; margin: 0 auto; }
 
+.date-container { display: block; margin: 0 auto; width: 66%; }
+
+.DatesForm { margin-bottom: 3%; }
+.DatesForm .btnFind { width: 20%; display: block; margin: 0 auto; }
+
 /*# sourceMappingURL=main.css.map */

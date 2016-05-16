@@ -69,4 +69,25 @@
 		$suplier  = $model->registerProduct($product);
 		return $suplier;
 	}
+
+	function ProductById($id)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->ProductById($id);
+		return $suplier;
+	}
+
+	function EditarProducto($product)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->editProduct($product);
+		return $suplier;
+	}
+
+	function GetBuysByDate($dates)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->GetBuysByDate($dates);
+		return $suplier;
+	}
  ?>

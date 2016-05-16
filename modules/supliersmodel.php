@@ -103,6 +103,33 @@
 			$datos = $userModel->StoreObject($suplier);
 			return $datos;
 		}
+
+		function ProductById($id)
+		{
+			$consultar = new Consultar();
+			$user      = $consultar->_ProductById($id);
+			return $user;
+		}
+
+		function editProduct($product)
+		{
+			$userModel = new UsersModel();
+			// Creando el objeto de la tabla y asignando las propiedades
+			$suplier = R::load("productos",$product['product_id']);
+			$suplier->nb_producto    = $product['nb_producto'];
+			$suplier->desc_producto  = $product['desc_producto'];
+			$suplier->num_precio     = $product['num_precio'];
+			$suplier->id_proveedor   = $product['id_proveedor'];
+			$datos = $userModel->StoreObject($suplier);
+			return $datos;
+		}
+
+		function GetBuysByDate($dates)
+		{
+			$consultar = new Consultar();
+			$user      = $consultar->_getBuysByDate($dates);
+			return $user;
+		}
 	}
 	
 
