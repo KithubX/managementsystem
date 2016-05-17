@@ -97,4 +97,11 @@
 		$suplier  = $model->DeleteBuy($compra);
 		return $suplier;
 	}
+
+	function getProductsBySuplier($id)
+	{
+		$model    = new SupliersModel();
+		$products  = $model->getProductsBySuplier($id);
+		return $products;
+	}
  ?>

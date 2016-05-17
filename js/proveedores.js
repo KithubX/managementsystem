@@ -14,7 +14,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 		"buys":[],
 		"error":false,
 		"search":null,
-		"selectedProduct":null,
+		"currentBuy":null,
 		"screenLocation":null,
 		"productRegister":null,
 		"formModified":false,
@@ -95,6 +95,25 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster,$rootScope
 		"screenLocation":null,
 		"productRegister":null,
 		"formModified":false,
+		"findProductsBySuplier":function(id){
+			if(id!=undefined)
+			{
+				 $http.get("http://localhost/managementsystem/modules/index.php/getProductsBySuplier",{params:{suplier:id}}).then(
+				 	function(response){
+				 		Data = response.data;
+				 		if(Data.error==0)
+				 		{
+				 			self.products = Data.info
+				 			console.log(self.products);
+				 		}else{toaster.pop('error',Data.mensaje);}
+				 	},
+				 	function(data){
+				 		self.isLoading = false;
+				 		toaster.pop('error',data.statusText);	
+				 	}
+				 )
+			}
+		},
 		"ValidateProduct":function(name,proveedor){
 			return $http.get("http://localhost/managementsystem/modules/index.php/searchProductbyname",{params:{name:name,proveedor:proveedor}})
 		},
@@ -528,6 +547,23 @@ app.controller("buysDetailController",function($scope,$http,toaster,buysService,
 	}
 });
 
-app.controller("addBuyController",function($scope,$http,toaster,buysService,$state){
-	alert("woah!");
+app.controller("addBuyController",function($scope,$http,toaster,buysService,$state,ProveedoresService,ProductService){
+	$scope.title 			  = "Registrar compra";
+	$scope.buysService        = buysService;
+	$scope.currentBuy         = buysService.currentBuy;
+	$scope.ProveedoresService = ProveedoresService;
+	$scope.ProductService     = ProductService;
+	$scope.ProveedoresService.GetSupliers();
+
+	$scope.GetProductsForSuplier = function(id)
+	{
+		$scope.ProductService.findProductsBySuplier(id);
+	}
+
+	$scope.AsignPrice = function(id_prod)
+	{
+		angular.forEach($scope.ProductService.products,function(entry){
+			console.log(entry);
+		});
+	}
 });

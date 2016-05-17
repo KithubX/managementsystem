@@ -139,6 +139,13 @@
 			$datos = $userModel->StoreObject($buy);
 			return $datos;
 		}
+
+		function getProductsBySuplier($id)
+		{
+			$consultar = new Consultar();
+			$user      = $consultar->_getProductsBySuplier($id);
+			return $user;
+		}
 	}
 	
 

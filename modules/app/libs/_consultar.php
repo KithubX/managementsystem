@@ -130,6 +130,15 @@
 
 		}
 
+		function _getProductsBySuplier($id)
+		{
+			$query = "
+				select id,nb_producto,num_precio from productos where id_proveedor = ? and sn_activo = 1
+			";
+			$data = $this->EjecuteQueryOneParam($query,$id);
+			return $data;
+		}
+
 		function Ejecutarconsulta($query)
 		{
 			$error   = 0;

@@ -1,0 +1,45 @@
+<div class="col-md-12">
+	<cc-spinner is-loading="ProductService.isLoading" message="Loading"></cc-spinner>
+    <div class="RegisterContainer clearfix" >
+    	<h3 class="text-center">{{title}}</h3>
+   		<form  class="form"  novalidate ng-submit="ProductService.saveProduct(ProductService.productRegister)" name="productForm">
+	    	<div class="row">
+	    		<div class="form-group col-md-12">
+   		    		<label for="">Proveedor: </label>
+	   		    		<select name="" id="" class="form-control" ng-options="prov.id as prov.nb_proveedor for prov in ProveedoresService.proveedores" ng-model="buysService.currentBuy.id_proveedor" required ng-change="GetProductsForSuplier(buysService.currentBuy.id_proveedor)">
+	              		<option value="">Seleccionar...</option>   
+	                </select>
+   		    	</div>
+
+	    		<div class="form-group col-md-12">
+   		    		<label for="">Productos: </label>
+	   		    		<select class="form-control" ng-options="prod.id as prod.nb_producto for prod in ProductService.products" ng-model="buysService.currentBuy.id_producto" required ng-change="AsignPrice(buysService.currentBuy.id_producto)">
+	              		<option value="">Seleccionar...</option>   
+	                </select>
+   		    	</div>
+				
+				<div class="form-group col-md-12">
+   		    		<label for="">Cantidad: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="buysService.currentBuy.num_cantidad" name="name" required ng-pattern="/^[0-9]{1,10}$/" ng-pattern-err-type="badPattern">
+   		    	</div>
+
+	    		<div class="form-group col-md-12">
+   		    		<label for="">Cantidad: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProductService.productRegister.nb_producto" name="name" required ng-pattern="/^[a-z\s\ñ\í\ó\ú\á\é]{1,60}$/i" ng-pattern-err-type="badPattern">
+   		    	</div>
+   		    	<div class="form-group col-md-12">
+   		    		<label for="">Descripción: </label>
+   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="ProductService.productRegister.desc_producto" name="name" required ng-pattern="/^[a-z\s\.\,\ñ]{1,200}$/i" ng-pattern-err-type="badPattern">
+   		    	</div>2
+				
+   		    	
+   		    	<div class="form-group col-md-12">
+   		    		<button class="btn btn-success Accept" type="submit">Guardar</button>
+   		    		<button class="btn btn-link Cancel"  type="button" ng-click="ProductService.GoProducts()">Cancelar</button>
+   		    	</div>
+	    	</div><!-- r0w-->
+   		</form>    
+    </div> 
+</div>
+{{buysService.currentBuy | json}}
+<div class="error" ng-if="ProductService.error==true"></div>
