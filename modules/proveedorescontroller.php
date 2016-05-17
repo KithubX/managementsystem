@@ -90,4 +90,11 @@
 		$suplier  = $model->GetBuysByDate($dates);
 		return $suplier;
 	}
+
+	function DeleteBuy($compra)
+	{
+		$model    = new SupliersModel();
+		$suplier  = $model->DeleteBuy($compra);
+		return $suplier;
+	}
  ?>

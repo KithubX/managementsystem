@@ -27,6 +27,29 @@ app.directive("ccSpinner",function(){
 	}
 });
 
+app.directive("ccBuys",function(){
+	return{
+		'restrict':'AE',
+		'templateUrl':"templates/detailedbuy.html",
+		'scope':{
+			'buy':'='
+		},
+		'controller':function($scope,buysService,$ngBootbox,$state,$filter){
+			$scope.buysService = buysService;
+			$scope.deleteBuy = function(){
+				$ngBootbox.confirm('¿Desea eliminar el registro de compra de '+$scope.buy.nb_producto+
+					' con fecha '+$filter("date")($scope.buy.fec_compra,"fullDate"))
+			    .then(function() {
+			    	$scope.buysService.deleteBuy($scope.buy);
+			    }, function() {
+			        console.log('Confirm dismissed!');
+			    });
+			}
+		}
+		
+	}
+});
+
 app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 	var self = {
 		"selectedUser": null,
@@ -318,6 +341,16 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/buys/',
 		templateUrl:'templates/buys.html',
 		controller:'productsController'	
+	})
+	.state('buysDetail',{
+		url:'/buysdetail/',
+		templateUrl:'templates/buysdetail.html',
+		controller:'buysDetailController'	
+	})
+	.state('addBuy',{
+		url:'/addBuy/',
+		templateUrl:'templates/addBuy.html',
+		controller:'addBuyController'	
 	});
 
 	$urlRouterProvider.otherwise('/');

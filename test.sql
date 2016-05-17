@@ -10,13 +10,13 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2016-05-16 22:27:50
+Date: 2016-05-17 16:26:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `compras`
+-- Table structure for compras
 -- ----------------------------
 DROP TABLE IF EXISTS `compras`;
 CREATE TABLE `compras` (
@@ -26,17 +26,18 @@ CREATE TABLE `compras` (
   `num_cantidad` int(11) DEFAULT NULL,
   `num_total` int(11) DEFAULT NULL,
   `fec_compra` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `sn_activo` int(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of compras
 -- ----------------------------
-INSERT INTO `compras` VALUES ('2', '1', '1', '4', '1500', '2016-05-01 00:00:00');
-INSERT INTO `compras` VALUES ('3', '2', '1', '4', '2000', '2016-05-31 00:00:00');
+INSERT INTO `compras` VALUES ('2', '1', '1', '4', '1500', '2016-05-17 15:45:51', '1');
+INSERT INTO `compras` VALUES ('3', '2', '1', '4', '2000', '2016-05-17 15:45:13', '1');
 
 -- ----------------------------
--- Table structure for `productos`
+-- Table structure for productos
 -- ----------------------------
 DROP TABLE IF EXISTS `productos`;
 CREATE TABLE `productos` (
@@ -58,7 +59,7 @@ INSERT INTO `productos` VALUES ('19', 'Coñazo', 'Coñazo mayor', '200', '1', '1
 INSERT INTO `productos` VALUES ('20', 'Coñazo marieloso', 'Super coñazo', '200', '2', '1');
 
 -- ----------------------------
--- Table structure for `proveedores`
+-- Table structure for proveedores
 -- ----------------------------
 DROP TABLE IF EXISTS `proveedores`;
 CREATE TABLE `proveedores` (
@@ -80,7 +81,7 @@ INSERT INTO `proveedores` VALUES ('7', 'Kike corps', 'Lorem ipsum dolor sit amet
 INSERT INTO `proveedores` VALUES ('8', 'Agroindustrias del norte', 'agricolas cabrones', '1', 'SuKarneSuKarne', '12321');
 
 -- ----------------------------
--- Table structure for `roles`
+-- Table structure for roles
 -- ----------------------------
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
@@ -98,7 +99,7 @@ INSERT INTO `roles` VALUES ('2', 'super user', 'super user');
 INSERT INTO `roles` VALUES ('3', 'user', 'user');
 
 -- ----------------------------
--- Table structure for `users`
+-- Table structure for users
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (

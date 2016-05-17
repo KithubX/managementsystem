@@ -470,6 +470,36 @@
         
         $app->response->body(json_encode($datos));
     }); 
+
+    $app->get('/deleteBuy/', function() use($app) 
+    {   
+            $params    = $app->request->get();
+            $compra    = $params['compra'];
+            $data      = DeleteBuy($compra);
+            $error     = $data['error'];
+           $app->response->headers->set("Content-type","application/json");
+            $app->response->setStatus(200);
+            if($error==1)
+            {
+                $datos = $data['mensaje'];
+                $datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+            }
+            else
+            {
+                // Buscando los usuarios restantes.
+                $buys      = GetBuysByDate($params);
+                $error      = $buys['error'];
+                if($error!=0)
+                {
+                    $info = "";
+                }else{$info = $buys['info'];}
+                $datos = array("info"=>$info,"error"=>$error ,"mensaje"=>$buys['mensaje']);
+            }
+            
+            $app->response->body(json_encode($datos));
+        
+    }); 
 	$app->delete("/books/:id",function ($id) use($app){
 		
 		try 

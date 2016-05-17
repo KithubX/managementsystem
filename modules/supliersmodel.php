@@ -130,6 +130,15 @@
 			$user      = $consultar->_getBuysByDate($dates);
 			return $user;
 		}
+
+		function DeleteBuy($compra)
+		{
+			$userModel = new UsersModel();
+			$buy       = R::load("compras",$compra);
+			$buy->sn_activo = 0;
+			$datos = $userModel->StoreObject($buy);
+			return $datos;
+		}
 	}
 	
 

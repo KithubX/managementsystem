@@ -1,0 +1,22 @@
+<div class="col-md-4" id="ccbuy-directive">
+	<div class="well well-sm">
+		<div class="row">
+				<div class="col-sm-12">
+					<h3 class="text-left">{{buy.nb_proveedor}}</h3>
+					<h4 class="text-left">Producto:  {{buy.nb_producto}}</h4>
+				</div>
+				<div class="data col-sm-10">
+					<small><i class="fa fa-calendar"></i> {{buy.fec_compra | date:'fullDate'}}</small><br>
+					<span><i class="fa fa-dollar"></i> Precio: {{buy.num_precio+" Pesos"}}</span><br>
+					<span><i class="fa fa-sort-amount-asc"></i>Cantidad: {{buy.num_cantidad}}</span><br>
+					<span><i class="fa fa-money"></i> Total: {{buy.num_total+" Pesos"}}</span>
+					<p class="lead">{{buy.desc_producto}}</p>
+				</div>
+				<div class="buttons col-sm-12">
+					<div class="btn-option"><button class="btn btn-warning btn-block">Editar</button></div>
+					<div class="btn-option"><button class="btn btn-danger btn-block" ng-click="deleteBuy()">Eliminar</button></div>
+				</div>
+		</div><!-- row-->
+	</div><!-- well -->
+	
+</div>

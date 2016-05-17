@@ -7,6 +7,10 @@
 
 }
 
+.buttonsBuys{
+    margin-left: 13%;
+}
+
 .sortables{
         display: inline-block;
     position: relative;
@@ -73,4 +77,20 @@
         display: block;
         margin: 0 auto;
     }
+    .btnRegister{
+        @extend .btnFind;
+        margin-top: 3%;
+    }
 }
+#ccbuy-directive{
+    .btn-option{
+            display: block;
+            margin: 0 auto;
+            width: 61%;
+            padding: 2%;
+    }
+    .data{
+        font-size: 15px;
+    }
+}
+

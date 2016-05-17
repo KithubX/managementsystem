@@ -1,0 +1,21 @@
+<cc-spinner is-loading="buysService.isLoading" message="Loading"></cc-spinner>
+<div class="col-md-12" ng-show="buysService.buys.length>0 && buysService.isLoading == false">
+	<div class="row">
+		<h2 class="text-center">Detalles de compra</h2>
+		<p class="lead text-center">En este apartado encontrará de forma detallada las compras efectuadas en el rango de fecha especificado</p>
+		<cc-buys ng-repeat="bought in buysService.buys" buy="bought"></cc-buys>
+	</div><!-- /.row -->
+</div><!-- /.col-md-12 -->
+
+<div class="col-md-12" ng-show="buysService.buys.length==0">
+	<div class="row">
+		<h3 class="text-center">No se encontraron resultados para la búsqueda.</h3>
+		<p class="text-center lead">
+			No hay resultados para el rango de fecha seleccionado o accedió a este apartado sin haber seleccionado las fechas, puede volver al apartado de compras dando click en el siguiente botón.
+		</p>
+		<div class="col-md-2 col-sm-offset-5 col-xs-10 col-xs-offset-1">
+			<button class="btn btn-primary btn-block" ng-click="GoCompras()">Compras</button>
+		</div>
+	</div>
+</div>
+

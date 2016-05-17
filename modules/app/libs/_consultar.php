@@ -113,14 +113,21 @@
 				com.num_cantidad,
 				com.num_total,
 				DATE(com.fec_compra) as fec_compra,
-				prov.nb_proveedor
+				prov.nb_proveedor,
+				prod.desc_producto,
+				prod.num_precio,
+				prod.nb_producto
 				from compras com
 				inner join proveedores prov
 				ON prov.id = com.id_proveedor
+				INNER JOIN productos prod
+				ON prod.id = com.id_producto
 				where fec_compra >= ? and fec_compra <= ?
+				AND com.sn_activo = 1
 			";
 			$data = $this->EjecuteQueryTwoParam($query,$start,$end);
 			return $data;
+
 		}
 
 		function Ejecutarconsulta($query)

@@ -11,7 +11,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 	var self = {
 		"isLoading":false,
 		"ordering":"name",
-		"products":[],
+		"buys":[],
 		"error":false,
 		"search":null,
 		"selectedProduct":null,
@@ -19,17 +19,37 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 		"productRegister":null,
 		"formModified":false,
 		"searchDates":null,
+		"dateStart":null,
+		"dateEnd":null,
+		"deleteBuy":function(buy){
+			//self.isLoading = true;
+			$http.get("http://localhost/managementsystem/modules/index.php/deleteBuy",{params:{compra:buy.id,dateStart:self.dateStart,dateEnd:self.dateEnd}}).then(
+			 	function(response){
+			 		var Data = response.data;
+			 		if(Data.error==0)
+			 		{
+			 			self.buys = Data.info
+			 			self.isLoading = false;
+			 		}else{toaster.pop('error',data.mensaje);}
+			 	},
+			 	function(data){
+			 		self.error     = true;
+			 		self.isLoading = false;
+			 		toaster.pop('error',data.statusText);	
+			 	}
+			 )
+		},
 		"FindBuys":function(dates){
 			if(dates!=null)
 			{
 				if(dates.start!=null && dates.end!= null)
 				{
-					var start = dates.start.toISOString().slice(0,10).replace(/-/g,"-")
-					var end   = dates.end.toISOString().slice(0,10).replace(/-/g,"-")
+					self.dateStart = dates.start.toISOString().slice(0,10).replace(/-/g,"-")
+					self.dateEnd   = dates.end.toISOString().slice(0,10).replace(/-/g,"-")
 					if(!self.isLoading)
 					{
 						self.isLoading = true;
-						 $http.get("http://localhost/managementsystem/modules/index.php/getBuys",{params:{dateStart:start,dateEnd:end}}).then(
+						 $http.get("http://localhost/managementsystem/modules/index.php/getBuys",{params:{dateStart:self.dateStart,dateEnd:self.dateEnd}}).then(
 						 	function(response){
 						 		
 						 		var Data = response.data;
@@ -37,7 +57,8 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 						 			self.isLoading = false;
 						   			if(Data.info.length>0)
 						   			{
-						   				alert("compras!");
+						   				self.buys = Data.info;
+						   				$state.go("buysDetail");
 						   			}else{toaster.pop('error',"No hay compras en ese rango de fechas");}
 						   		}else{
 						   			self.error     = true;
@@ -472,6 +493,7 @@ $scope.ProveedoresService = ProveedoresService;
 $scope.ProductService.isLoading = true;
 $scope.ProveedoresService.GetSupliers();
 $scope.formModified = $scope.ProductService.formModified;
+
 $http.get("http://localhost/managementsystem/modules/index.php/searchProductById",{params:{id:$scope.id_Product}}).then(
 		function (response)
 		{
@@ -485,10 +507,27 @@ $http.get("http://localhost/managementsystem/modules/index.php/searchProductById
 	);
 });
 
-app.controller("productsController",function($scope,$http,toaster,buysService){
+app.controller("productsController",function($scope,$http,toaster,buysService,$state){
 	$scope.buysService = buysService;
 	  $scope.options = {
 	    minDate: new Date('dd-MMM-yyyy'),
 	    showWeeks: true
 	  };
+	  $scope.RedirectAdd = function()
+	  {
+	  	$state.go("addBuy");
+	  }
+});
+
+app.controller("buysDetailController",function($scope,$http,toaster,buysService,$state){
+	$scope.buysService = buysService;
+	console.log($scope.buysService.buys);
+	$scope.GoCompras = function()
+	{
+		$state.go("buys");
+	}
+});
+
+app.controller("addBuyController",function($scope,$http,toaster,buysService,$state){
+	alert("woah!");
 });
