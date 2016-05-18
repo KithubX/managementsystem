@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2016-05-17 16:26:12
+Date: 2016-05-18 18:00:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,16 +25,20 @@ CREATE TABLE `compras` (
   `id_proveedor` int(11) DEFAULT NULL,
   `num_cantidad` int(11) DEFAULT NULL,
   `num_total` int(11) DEFAULT NULL,
-  `fec_compra` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `fec_compra` timestamp NULL DEFAULT NULL,
   `sn_activo` int(1) DEFAULT '1',
+  `id_usuario` int(11) DEFAULT NULL,
+  `desc_compra` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of compras
 -- ----------------------------
-INSERT INTO `compras` VALUES ('2', '1', '1', '4', '1500', '2016-05-17 15:45:51', '1');
-INSERT INTO `compras` VALUES ('3', '2', '1', '4', '2000', '2016-05-17 15:45:13', '1');
+INSERT INTO `compras` VALUES ('2', '1', '1', '4', '1500', '2016-05-01 16:51:10', '1', '1', 'asdasdadasd');
+INSERT INTO `compras` VALUES ('3', '2', '1', '4', '2000', '2016-05-12 16:51:10', '1', '1', 'dasda');
+INSERT INTO `compras` VALUES ('8', '1', '1', '8', '800', '2016-05-27 16:51:09', '1', '1', 'adad');
+INSERT INTO `compras` VALUES ('9', '1', '1', '4', '800', '2016-05-24 16:51:08', '1', '1', 'adad');
 
 -- ----------------------------
 -- Table structure for productos
