@@ -117,8 +117,7 @@
 	function findBuyById($id)
 	{
 		$model    = new SupliersModel();
-		$products  = $model->findBuyById($id);
-		print_r($products);
-		//return $products;
+		$buy      = $model->findBuyById($id);
+		return $buy;
 	}
  ?>

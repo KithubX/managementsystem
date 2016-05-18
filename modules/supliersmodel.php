@@ -157,6 +157,8 @@
 			$buyRegister->fec_compra   = $params['fec_compra'];
 			$buyRegister->id_proveedor = $params['id_proveedor'];
 			$buyRegister->id_usuario   = $params['id_usuario'];
+			$buyRegister->desc_compra  = $params['desc_compra'];
+			
 			$datos = $userModel->StoreObject($buyRegister);
 			return $datos;
 		}

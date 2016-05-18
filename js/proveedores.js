@@ -27,7 +27,9 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 			 		var Data = response.data;
 			 		if(Data.error==0)
 			 		{
-			 			self.buys = Data.info
+			 			self.currentBuy = Data.info[0];
+			 			self.currentBuy.num_cantidad = parseInt(Data.info[0].num_cantidad);
+			 			self.currentBuy.Petition = true;
 			 			self.isLoading = false;
 			 		}else{toaster.pop('error',data.mensaje);}
 			 	},
@@ -655,12 +657,20 @@ app.controller("editBuyController",function($scope,$http,toaster,buysService,$st
 	$scope.title 			  = "Editar compra";
 	$scope.id_compra      	  = $stateParams.id;
 	$scope.buysService        = buysService;
+	$scope.buysService.findBuyById($scope.id_compra);
 	$scope.currentBuy         = buysService.currentBuy;
 	$scope.ProveedoresService = ProveedoresService;
 	$scope.ProductService     = ProductService;
+	$scope.ProductService.products = $scope.currentBuy.productos;
 	$scope.buysService.screenLocation = "Add";
 	$scope.ProveedoresService.GetSupliers();
-	$scope.buysService.findBuyById($scope.id_compra);
-	$scope.buysService.currentBuy.fec_compra = "05-18-2016";
+	$scope.buysService.currentBuy.fec_compra = "05-17-2016";
 	
+	$scope.$watch("buysService.currentBuy",function(){
+		if($scope.buysService.currentBuy.Petition == true)
+		{
+			$scope.buysService.currentBuy.Petition = false;
+			$scope.ProductService.findProductsBySuplier($scope.buysService.currentBuy.id_proveedor);
+		}
+	});
 });

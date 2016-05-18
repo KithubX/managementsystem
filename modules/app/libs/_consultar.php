@@ -148,6 +148,7 @@
 				id_producto,
 				id_proveedor,
 				num_cantidad,
+				desc_compra,
 				DATE_FORMAT(fec_compra,"%m-%d-%Y") as fec_compra
 				from compras
 				where id = ?

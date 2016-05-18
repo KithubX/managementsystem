@@ -551,8 +551,7 @@
             $params    = $app->request->get();
             $id_buy    = $params['id'];
             $data      = findBuyById($id_buy);
-            print_r($data);
-            /*$error     = $data['error'];
+            $error     = $data['error'];
             $app->response->headers->set("Content-type","application/json");
             $app->response->setStatus(200);
             if($error==1)
@@ -563,16 +562,17 @@
             }
             else
             {
-                // Buscando los usuarios restantes.
-                $buys      = GetBuysByDate($params);
-                $error      = $buys['error'];
-                if($error!=0)
+                // Encontrar los productos por distribuido
+                $products = getProductsBySuplier($data['info'][0]['id_proveedor']);
+                if($products['error']==0)
                 {
-                    $info = "";
-                }else{$info = $buys['info'];}
-                $datos = array("info"=>$info,"error"=>$error ,"mensaje"=>$buys['mensaje']);
+                    $data['info'][0]['productos'] = $products['info'];
+                    $datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+                }else{
+                    $datos = array("info"=>0,"error"=>1,"mensaje"=>$products["mensaje"]);
+                }
+                
             }
-            
-            $app->response->body(json_encode($datos)); */
+            $app->response->body(json_encode($datos));
     }); 
  ?>
