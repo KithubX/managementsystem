@@ -14,13 +14,21 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 		"buys":[],
 		"error":false,
 		"search":null,
-		"currentBuy":null,
+		"currentBuy":[],
 		"screenLocation":null,
 		"productRegister":null,
 		"formModified":false,
 		"searchDates":null,
 		"dateStart":null,
 		"dateEnd":null,
+		"SaveBuy":function(buy){
+			
+			if(buy.num_total==undefined)
+			{
+				buy.num_total = buy.price*buy.num_cantidad;
+			}
+			console.log(buy);
+		},
 		"deleteBuy":function(buy){
 			//self.isLoading = true;
 			$http.get("http://localhost/managementsystem/modules/index.php/deleteBuy",{params:{compra:buy.id,dateStart:self.dateStart,dateEnd:self.dateEnd}}).then(
@@ -555,6 +563,7 @@ app.controller("addBuyController",function($scope,$http,toaster,buysService,$sta
 	$scope.ProductService     = ProductService;
 	$scope.ProveedoresService.GetSupliers();
 
+
 	$scope.GetProductsForSuplier = function(id)
 	{
 		$scope.ProductService.findProductsBySuplier(id);
@@ -563,7 +572,21 @@ app.controller("addBuyController",function($scope,$http,toaster,buysService,$sta
 	$scope.AsignPrice = function(id_prod)
 	{
 		angular.forEach($scope.ProductService.products,function(entry){
-			console.log(entry);
+			if(entry.id==id_prod)
+			{
+				$scope.buysService.currentBuy.price = entry.num_precio;
+				if($scope.buysService.currentBuy.num_cantidad!=undefined)
+				{
+					$scope.buysService.currentBuy.num_total = entry.num_precio*$scope.buysService.currentBuy.num_cantidad;
+				}	
+			}
 		});
 	}
+
+	$scope.$watch('buysService.currentBuy.num_cantidad',function(){
+		if($scope.currentBuy.num_cantidad>0 && $scope.price>0)
+		{	
+			$scope.buysService.currentBuy.num_total = $scope.price*$scope.currentBuy.num_cantidad;
+		}
+	});
 });
