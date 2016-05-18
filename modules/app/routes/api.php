@@ -523,20 +523,56 @@
             $app->response->body(json_encode($datos));
         
     }); 
-	$app->delete("/books/:id",function ($id) use($app){
-		
-		try 
-		{
-			$con = getConnection();
-			$dbh = $con->prepare("UDELETE FROM BOOKS WHERE id = ?");
-			$dbh->bindParam(1,$id);
-			$dbh->execute();
- 	    	$con = null;
- 	    	$app->response->headers->set("Content-type","application/json");
- 	    	$app->response->setStatus(200);
- 	    	$app->response->body(json_encode(array("res"=>1)));
-		} catch (PDOException $e) {
-			echo "Error: ".$e->getMessage();
-		}
-	});
+
+
+    $app->post("/RegisterBuy/", function() use($app){
+        $product = $app->request->post();
+        // Registrando al producto
+        $data   = RegisterBuy($product);
+        $error          = $data['error'];
+        $app->response->headers->set("Content-type","application/json");
+        $app->response->setStatus(200);
+        if($error==1)
+        {
+            $datos = $data['mensaje'];
+            $datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+        }
+        else
+        {
+            $datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+        }
+        
+        $app->response->body(json_encode($datos));
+    });
+
+     $app->get('/findBuyById/', function() use($app) 
+    {   
+            $params    = $app->request->get();
+            $id_buy    = $params['id'];
+            $data      = findBuyById($id_buy);
+            print_r($data);
+            /*$error     = $data['error'];
+            $app->response->headers->set("Content-type","application/json");
+            $app->response->setStatus(200);
+            if($error==1)
+            {
+                $datos = $data['mensaje'];
+                $datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+            }
+            else
+            {
+                // Buscando los usuarios restantes.
+                $buys      = GetBuysByDate($params);
+                $error      = $buys['error'];
+                if($error!=0)
+                {
+                    $info = "";
+                }else{$info = $buys['info'];}
+                $datos = array("info"=>$info,"error"=>$error ,"mensaje"=>$buys['mensaje']);
+            }
+            
+            $app->response->body(json_encode($datos)); */
+    }); 
  ?>

@@ -36,6 +36,11 @@ app.directive("ccBuys",function(){
 		},
 		'controller':function($scope,buysService,$ngBootbox,$state,$filter){
 			$scope.buysService = buysService;
+			$scope.redirectEdit = function()
+			{
+				$state.go("editBuy",{id:$scope.buy.id});
+			}
+
 			$scope.deleteBuy = function(){
 				$ngBootbox.confirm('¿Desea eliminar el registro de compra de '+$scope.buy.nb_producto+
 					' con fecha '+$filter("date")($scope.buy.fec_compra,"fullDate"))
@@ -45,6 +50,7 @@ app.directive("ccBuys",function(){
 			        console.log('Confirm dismissed!');
 			    });
 			}
+			
 		}
 		
 	}
@@ -351,6 +357,11 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/addBuy/',
 		templateUrl:'templates/addBuy.html',
 		controller:'addBuyController'	
+	})
+	.state('editBuy',{
+		url:'/editBuy/:id',
+		templateUrl:'templates/addBuy.html',
+		controller:'editBuyController'	
 	});
 
 	$urlRouterProvider.otherwise('/');
@@ -381,7 +392,7 @@ app.controller("editUserController",function($scope,usersService,$http,toaster,$
 	$scope.usersService.ScreenLoc = "edit";
 	$scope.id_user      		  = $stateParams.id_user;
 	$scope.types				  = $scope.usersService.usersType;
-
+	
 
 
 	// Buscando por id el usuario

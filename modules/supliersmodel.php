@@ -146,6 +146,27 @@
 			$user      = $consultar->_getProductsBySuplier($id);
 			return $user;
 		}
+		function RegisterBuy($params)
+		{
+			$userModel = new UsersModel();
+			// Creando el objeto de la tabla y asignando las propiedades
+			$buyRegister = R::dispense("compras");
+			$buyRegister->id_producto  = $params['id_producto'];
+			$buyRegister->num_cantidad = $params['num_cantidad'];
+			$buyRegister->num_total    = $params['num_total'];
+			$buyRegister->fec_compra   = $params['fec_compra'];
+			$buyRegister->id_proveedor = $params['id_proveedor'];
+			$buyRegister->id_usuario   = $params['id_usuario'];
+			$datos = $userModel->StoreObject($buyRegister);
+			return $datos;
+		}
+
+		function findBuyById($id)
+		{
+			$consultar = new Consultar();
+			$user      = $consultar->_findBuyById($id);
+			return $user;
+		}
 	}
 	
 

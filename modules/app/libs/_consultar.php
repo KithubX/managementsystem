@@ -122,8 +122,9 @@
 				ON prov.id = com.id_proveedor
 				INNER JOIN productos prod
 				ON prod.id = com.id_producto
-				where fec_compra >= ? and fec_compra <= ?
+				where com.fec_compra >= ? and com.fec_compra <= ?
 				AND com.sn_activo = 1
+				ORDER BY com.fec_compra ASC
 			";
 			$data = $this->EjecuteQueryTwoParam($query,$start,$end);
 			return $data;
@@ -134,6 +135,15 @@
 		{
 			$query = "
 				select id,nb_producto,num_precio from productos where id_proveedor = ? and sn_activo = 1
+			";
+			$data = $this->EjecuteQueryOneParam($query,$id);
+			return $data;
+		}
+
+		function _findBuyById($id)
+		{
+			$query = "
+				select * from compras where id = ?
 			";
 			$data = $this->EjecuteQueryOneParam($query,$id);
 			return $data;

@@ -104,4 +104,20 @@
 		$products  = $model->getProductsBySuplier($id);
 		return $products;
 	}
+
+	function RegisterBuy($params)
+	{
+		$id_user    = $_SESSION['id_user'];
+		$params['id_usuario'] = $id_user;
+		$model     			  = new SupliersModel();
+		$buy  			  = $model->RegisterBuy($params);
+		return $buy;
+	}
+
+	function findBuyById($id)
+	{
+		$model    = new SupliersModel();
+		$products  = $model->findBuyById($id);
+		return $products;
+	}
  ?>

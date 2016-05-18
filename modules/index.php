@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('America/Chihuahua');
 
 require 'vendor/autoload.php';
 

@@ -21,16 +21,65 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 		"searchDates":null,
 		"dateStart":null,
 		"dateEnd":null,
+		"findBuyById":function(id){
+			$http.get("http://localhost/managementsystem/modules/index.php/findBuyById",{params:{id:id}}).then(
+			 	function(response){
+			 		var Data = response.data;
+			 		if(Data.error==0)
+			 		{
+			 			self.buys = Data.info
+			 			self.isLoading = false;
+			 		}else{toaster.pop('error',data.mensaje);}
+			 	},
+			 	function(data){
+			 		self.error     = true;
+			 		self.isLoading = false;
+			 		toaster.pop('error',data.statusText);	
+			 	}
+			 )
+		},
 		"SaveBuy":function(buy){
-			
+			console.log(buy);
 			if(buy.num_total==undefined)
 			{
 				buy.num_total = buy.price*buy.num_cantidad;
 			}
-			console.log(buy);
+			
+			if(buy.fec_compra != undefined)
+			{
+				// Insertar la compra
+				var send_method = (self.screenLocation=="Add")?"post":"put";
+				var url_method  = (self.screenLocation=="Add")?"RegisterBuy":"EditBuy";
+				var messageEnd  = (self.screenLocation=="Add")?"Compra Registrada!":"Compra Editada";
+				var product_id  = (buy.id!=undefined)?product.id:0;
+				var buyDate     = buy.fec_compra.toISOString().slice(0,10).replace(/-/g,"-")
+				self.isLoading  = true;
+				//Registrando al usuario.
+				$http({method: send_method,url:"http://localhost/managementsystem/modules/index.php/"+url_method,
+				data: $.param({"id_proveedor":buy.id_proveedor,"id_producto":buy.id_proveedor,"num_cantidad":buy.num_cantidad,"num_total":buy.num_total,"fec_compra":buyDate}), 
+				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				})
+				 .then(
+				 	function(response){
+				 		var Data = response.data;
+				 		if(Data.error==0)
+				 		{
+				 			self.formModified = true;
+							toaster.pop('success',messageEnd);	
+				 			self.isLoading  = false;
+				 		}else{toaster.pop('error',Data.mensaje);}
+				 	},
+				 	function(data){
+				 		self.error     = true;
+				 		self.isLoading = false;
+				 		toaster.pop('error',data.statusText);	
+				 	}
+				 )
+			}else{toaster.pop('error',"Favor de seleccionar una fecha");}
+			
 		},
 		"deleteBuy":function(buy){
-			//self.isLoading = true;
+			self.isLoading = true;
 			$http.get("http://localhost/managementsystem/modules/index.php/deleteBuy",{params:{compra:buy.id,dateStart:self.dateStart,dateEnd:self.dateEnd}}).then(
 			 	function(response){
 			 		var Data = response.data;
@@ -178,7 +227,7 @@ app.service("ProductService",function($http,$state,$ngBootbox,toaster,$rootScope
 					},
 					function(data)
 					{
-						//self.error     = true;
+						self.error     = true;
 				 		self.isLoading = false;
 				 		toaster.pop('error',data.statusText);
 					}
@@ -548,11 +597,12 @@ app.controller("productsController",function($scope,$http,toaster,buysService,$s
 
 app.controller("buysDetailController",function($scope,$http,toaster,buysService,$state){
 	$scope.buysService = buysService;
-	console.log($scope.buysService.buys);
 	$scope.GoCompras = function()
 	{
 		$state.go("buys");
 	}
+
+
 });
 
 app.controller("addBuyController",function($scope,$http,toaster,buysService,$state,ProveedoresService,ProductService){
@@ -561,6 +611,7 @@ app.controller("addBuyController",function($scope,$http,toaster,buysService,$sta
 	$scope.currentBuy         = buysService.currentBuy;
 	$scope.ProveedoresService = ProveedoresService;
 	$scope.ProductService     = ProductService;
+	$scope.buysService.screenLocation = "Add";
 	$scope.ProveedoresService.GetSupliers();
 
 
@@ -583,10 +634,33 @@ app.controller("addBuyController",function($scope,$http,toaster,buysService,$sta
 		});
 	}
 
+	$scope.$watch("buysService.formModified",function(){
+		if(buysService.formModified==true)
+		{
+			$scope.buyForm.$setPristine();
+			$scope.buysService.currentBuy = [];
+			buysService.formModified      = false;
+		}
+	});
+
 	$scope.$watch('buysService.currentBuy.num_cantidad',function(){
 		if($scope.currentBuy.num_cantidad>0 && $scope.price>0)
 		{	
 			$scope.buysService.currentBuy.num_total = $scope.price*$scope.currentBuy.num_cantidad;
 		}
 	});
+});
+
+app.controller("editBuyController",function($scope,$http,toaster,buysService,$state,ProveedoresService,ProductService,$stateParams){
+	$scope.title 			  = "Editar compra";
+	$scope.id_compra      	  = $stateParams.id;
+	$scope.buysService        = buysService;
+	$scope.currentBuy         = buysService.currentBuy;
+	$scope.ProveedoresService = ProveedoresService;
+	$scope.ProductService     = ProductService;
+	$scope.buysService.screenLocation = "Add";
+	$scope.ProveedoresService.GetSupliers();
+	$scope.buysService.findBuyById($scope.id_compra);
+	$scope.buysService.currentBuy.fec_compra = "05-18-2016";
+	
 });

@@ -1,8 +1,8 @@
 <div class="col-md-12">
-	<cc-spinner is-loading="ProductService.isLoading" message="Loading"></cc-spinner>
-    <div class="RegisterContainer clearfix" >
+	<cc-spinner is-loading="buysService.isLoading" message="Loading"></cc-spinner>
+    <div class="RegisterContainer clearfix" ng-show="buysService.isLoading==false">
     	<h3 class="text-center">{{title}}</h3>
-   		<form  class="form"  novalidate ng-submit="buysService.SaveBuy(buysService.currentBuy)" name="productForm">
+   		<form  class="form"  novalidate ng-submit="buysService.SaveBuy(buysService.currentBuy)" name="buyForm">
 	    	<div class="row">
 	    		<div class="form-group col-md-12">
    		    		<label for="">Proveedor: </label>
@@ -20,13 +20,18 @@
 				
 				    <div class="form-group col-md-12">
    		    		<label for="">Cantidad: </label>
-   		    		<input type="text" class="form-control" placeholder="Ingrese el nombre..." ng-model="buysService.currentBuy.num_cantidad" name="name" required ng-pattern="/^[1-9]{1,10}$/" ng-pattern-err-type="badPattern" ng-model-options="{debounce:300}">
+   		    		<input type="number" class="form-control" placeholder="Ingrese el nombre..." ng-model="buysService.currentBuy.num_cantidad" name="name" required ng-pattern="/^[0-9]{1,10}$/" ng-pattern-err-type="badPattern" ng-model-options="{debounce:300}" min="1">
    		    	</div>
 
   	    		<div class="form-group col-md-12">
      		    		<label for="">Descripción: </label>
-                <textarea class="form-control" placeholder="Ingrese el nombre..." ng-model="buysService.currentBuy.desc_compra" name="name" required ng-pattern="/^[a-z\s\ñ\í\ó\ú\á\é]{1,350}$/i" ng-pattern-err-type="badPattern"></textarea>
+                <textarea class="form-control" placeholder="Ingrese la descripción de la compra..." ng-model="buysService.currentBuy.desc_compra" name="name" required ng-pattern="/^[a-z\s\ñ\í\ó\ú\á\é]{1,350}$/i" ng-pattern-err-type="badPattern"></textarea>
      		    </div>
+
+            <div class="form-group col-md-12">
+                <label for="">Fecha: </label>
+                <uib-datepicker ng-model="buysService.currentBuy.fec_compra" datepicker-options="options"></uib-datepicker>
+            </div>
 				
    		    	
    		    	<div class="form-group col-md-12">
