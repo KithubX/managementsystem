@@ -118,6 +118,7 @@
 	{
 		$model    = new SupliersModel();
 		$products  = $model->findBuyById($id);
-		return $products;
+		print_r($products);
+		//return $products;
 	}
  ?>

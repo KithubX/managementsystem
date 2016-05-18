@@ -142,9 +142,16 @@
 
 		function _findBuyById($id)
 		{
-			$query = "
-				select * from compras where id = ?
-			";
+			$query = '
+				select
+				id,
+				id_producto,
+				id_proveedor,
+				num_cantidad,
+				DATE_FORMAT(fec_compra,"%m-%d-%Y") as fec_compra
+				from compras
+				where id = ?
+			';
 			$data = $this->EjecuteQueryOneParam($query,$id);
 			return $data;
 		}
