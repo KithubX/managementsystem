@@ -611,16 +611,12 @@ app.controller("addBuyController",function($scope,$http,toaster,buysService,$sta
 	$scope.title 			  = "Registrar compra";
 	$scope.buysService        = buysService;
 	$scope.currentBuy         = buysService.currentBuy;
+	$scope.buysService.currentBuy = null;
 	$scope.ProveedoresService = ProveedoresService;
 	$scope.ProductService     = ProductService;
 	$scope.buysService.screenLocation = "Add";
 	$scope.ProveedoresService.GetSupliers();
 
-
-	$scope.GetProductsForSuplier = function(id)
-	{
-		$scope.ProductService.findProductsBySuplier(id);
-	}
 
 	$scope.AsignPrice = function(id_prod)
 	{
@@ -666,6 +662,21 @@ app.controller("editBuyController",function($scope,$http,toaster,buysService,$st
 	$scope.ProveedoresService.GetSupliers();
 	$scope.buysService.currentBuy.fec_compra = "05-17-2016";
 	
+
+	$scope.AsignPrice = function(id_prod)
+	{
+		angular.forEach($scope.ProductService.products,function(entry){
+			if(entry.id==id_prod)
+			{
+				$scope.buysService.currentBuy.price = entry.num_precio;
+				if($scope.buysService.currentBuy.num_cantidad!=undefined)
+				{
+					$scope.buysService.currentBuy.num_total = entry.num_precio*$scope.buysService.currentBuy.num_cantidad;
+				}	
+			}
+		});
+	}
+
 	$scope.$watch("buysService.currentBuy",function(){
 		if($scope.buysService.currentBuy.Petition == true)
 		{

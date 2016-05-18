@@ -6,7 +6,7 @@
 	    	<div class="row">
 	    		<div class="form-group col-md-12">
    		    		<label for="">Proveedor: </label>
-	   		    		<select name="" id="" class="form-control" ng-options="prov.id as prov.nb_proveedor for prov in ProveedoresService.proveedores" ng-model="buysService.currentBuy.id_proveedor" required ng-change="GetProductsForSuplier(buysService.currentBuy.id_proveedor)">
+	   		    		<select name="" id="" class="form-control" ng-options="prov.id as prov.nb_proveedor for prov in ProveedoresService.proveedores" ng-model="buysService.currentBuy.id_proveedor" required ng-change="ProductService.findProductsBySuplier(buysService.currentBuy.id_proveedor)">
 	              		<option value="">Seleccionar...</option>   
 	                </select>
    		    	</div>
