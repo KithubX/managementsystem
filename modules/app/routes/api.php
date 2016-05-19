@@ -562,16 +562,8 @@
             }
             else
             {
-                // Encontrar los productos por distribuido
-                $products = getProductsBySuplier($data['info'][0]['id_proveedor']);
-                if($products['error']==0)
-                {
-                    $data['info'][0]['productos'] = $products['info'];
-                    $datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
-                }else{
-                    $datos = array("info"=>0,"error"=>1,"mensaje"=>$products["mensaje"]);
-                }
-                
+              
+                $datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
             }
             $app->response->body(json_encode($datos));
     }); 

@@ -13,7 +13,7 @@
 
 	    		<div class="form-group col-md-12">
    		    		<label for="">Productos: </label>
-	   		    		<select class="form-control" ng-options="prod.id as prod.nb_producto for prod in ProductService.products" ng-model="buysService.currentBuy.id_producto" required ng-change="AsignPrice(buysService.currentBuy.id_producto)">
+	   		    		<select class="form-control" ng-options="prod.id as prod.nb_producto for prod in ProductService.products" ng-model="buysService.currentBuy.id_producto" required ng-change="buysService.AsignPrice(buysService.currentBuy.id_producto,ProductService.products)">
 	              		<option value="">Seleccionar...</option>   
 	                </select>
    		    	</div>
