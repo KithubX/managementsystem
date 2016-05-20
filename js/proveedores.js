@@ -10,7 +10,7 @@ app.filter('PriceFilter',function(){
 app.service("buysService",function($http,$state,$ngBootbox,toaster){
 	var self = {
 		"isLoading":false,
-		"ordering":"name",
+		"ordering":"fec_compra",
 		"buys":[],
 		"error":false,
 		"search":null,
@@ -21,8 +21,11 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 		"searchDates":null,
 		"dateStart":null,
 		"dateEnd":null,
+		"selectedBuy":null,
+		"goBuys":function(){
+			$state.go("buys");
+		},
 		"AsignPrice":function(id_prod,products){
-			alert(id_prod);
 			angular.forEach(products,function(entry){
 				if(entry.id==id_prod)
 				{
@@ -46,7 +49,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 			 			self.currentBuy.Petition  	 = true;
 			 			self.currentBuy.fec_compra   = new Date(self.currentBuy.fec_compra);
 			 			self.isLoading  		  	 = false;
-			 		}else{toaster.pop('error',data.mensaje);}
+			 		}else{toaster.pop('error',Data.mensaje);}
 			 	},
 			 	function(data){
 			 		self.error     = true;
@@ -56,7 +59,6 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 			 )
 		},
 		"SaveBuy":function(buy){
-			
 			if(buy.num_total==undefined)
 			{
 				buy.num_total = buy.price*buy.num_cantidad;
@@ -69,15 +71,14 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 				var send_method = (self.screenLocation=="Add")?"post":"put";
 				var url_method  = (self.screenLocation=="Add")?"RegisterBuy":"EditBuy";
 				var messageEnd  = (self.screenLocation=="Add")?"Compra Registrada!":"Compra Editada";
-				var product_id  = (buy.id!=undefined)?buy.id:0;
+				var id_compra   = (buy.id!=undefined)?buy.id:0;
 				buyDate         = buy.fec_compra.toISOString().slice(0,10).replace(/-/g,"-");
 				buy.num_total   = buy.price*buy.num_cantidad;
-				console.log(buy);
 				
 				self.isLoading  = true;
 				//Registrando al usuario.
 				$http({method: send_method,url:"http://localhost/managementsystem/modules/index.php/"+url_method,
-				data: $.param({"id_proveedor":buy.id_proveedor,"id_producto":buy.id_producto,"num_cantidad":buy.num_cantidad,"num_total":buy.num_total,"fec_compra":buyDate,"desc_compra":buy.desc_compra}), 
+				data: $.param({"id_proveedor":buy.id_proveedor,"id_producto":buy.id_producto,"num_cantidad":buy.num_cantidad,"num_total":buy.num_total,"fec_compra":buyDate,"desc_compra":buy.desc_compra,"id_compra":id_compra}), 
 				  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				})
 				 .then(
@@ -136,7 +137,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 						   			if(Data.info.length>0)
 						   			{
 						   				self.buys = Data.info;
-						   				$state.go("buysDetail");
+						   				$state.go("buysDetail.buysTables");
 						   			}else{toaster.pop('error',"No hay compras en ese rango de fechas");}
 						   		}else{
 						   			self.error     = true;

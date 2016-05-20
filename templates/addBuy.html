@@ -36,11 +36,10 @@
    		    	
    		    	<div class="form-group col-md-12">
    		    		<button class="btn btn-success Accept" type="submit">Guardar</button>
-   		    		<button class="btn btn-link Cancel"  type="button" ng-click="ProductService.GoProducts()">Cancelar</button>
+   		    		<button class="btn btn-link Cancel"  type="button" ng-click="buysService.goBuys()">Cancelar</button>
    		    	</div>
 	    	</div><!-- r0w-->
    		</form>    
     </div> 
 </div>
-{{buysService.currentBuy | json}}
 <div class="error" ng-if="ProductService.error==true"></div>

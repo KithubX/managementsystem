@@ -56,6 +56,50 @@ app.directive("ccBuys",function(){
 	}
 });
 
+app.directive("buysTable",function(){
+		return{
+		'restrict':'AE',
+		'templateUrl':"templates/tablebuy.html",
+		'scope':{
+			'buys':'='
+		},
+		'controller':function($scope,buysService,$ngBootbox,$state,$filter,toaster){
+			$scope.buysService = buysService;
+			$scope.currentPage       = 1; // Página actual, para paginación
+			$scope.pageSize 	     = 5; // Tamaño de la página, para paginación.
+			$scope.redirectEdit = function()
+			{
+				console.log("holiss");
+				if(buysService.selectedBuy!=null)
+				{
+					$state.go("editBuy",{id:$scope.buysService.selectedBuy.id});	
+				}else{toaster.pop('error',"Favor de seleccionar una compra");}
+				
+			}
+			$scope.selectBuy   = function(buy)
+			{
+				if(buysService.selectedBuy == buy)
+				{
+					buysService.selectedBuy = null;
+				}else{buysService.selectedBuy = buy;}
+			}
+
+			$scope.deleteBuy = function(){
+				var buy = $scope.buysService.selectedBuy;
+				$ngBootbox.confirm('¿Desea eliminar el registro de compra de '+buy.nb_producto+
+					' con fecha '+$filter("date")(buy.fec_compra,"fullDate"))
+			    .then(function() {
+			    	$scope.buysService.deleteBuy(buy);
+			    }, function() {
+			        console.log('Confirm dismissed!');
+			    });
+			}
+			
+		}
+		
+	}
+});
+
 app.service("usersService",function($http,toaster,$rootScope,$state,$ngBootbox){
 	var self = {
 		"selectedUser": null,
@@ -352,6 +396,16 @@ app.config(function($stateProvider,$urlRouterProvider){
 		url:'/buysdetail/',
 		templateUrl:'templates/buysdetail.html',
 		controller:'buysDetailController'	
+	})
+	.state('buysDetail.buysFrames',{
+		url:'/buysFrames',
+		templateUrl:'templates/buysframes.html',
+		controller:'buysDetailController'
+	})
+	.state('buysDetail.buysTables',{
+		url:'/buysTables',
+		templateUrl:'templates/buytables.html',
+		controller:'buysDetailController'
 	})
 	.state('addBuy',{
 		url:'/addBuy/',

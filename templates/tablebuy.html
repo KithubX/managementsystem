@@ -1,0 +1,53 @@
+<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-12 Filtros pleft">
+		    <div class="row">
+		        <div class="col-xs-4">
+		      <label for="search">Búsqueda:</label>
+		      <input ng-model="q" id="search" class="form-control" placeholder="Filtrado">
+		    </div>
+		    <div class="col-xs-2">
+		      <label for="search">Usuarios Por Página:</label>
+		      <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+		    </div>
+		    </div><!-- row -->
+		</div><!-- filtros -->
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th class="text-center"><i class="fa fa-industry"></i> Empresa</th>
+					<th class="text-center"><i class="fa fa-product-hunt"></i> Producto</th>
+					<th class="text-center"><i class="fa fa-calendar"></i> Fecha</th>
+					<th class="text-center"><i class="fa fa-dollar"></i> Precio</th>
+					<th class="text-center"><i class="fa fa-sort-amount-asc"> Cantidad</th>
+					<th class="text-center"><i class="fa fa-money"></i> Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr dir-paginate="buy in buys | filter:q | itemsPerPage: pageSize | orderBy:buysService.ordering" current-page="currentPage" class="text-center" ng-click="selectBuy(buy)" ng-class="{'selected':buy.id == buysService.selectedBuy.id}" ng-click="selectBuy(buy)">
+					<td>{{buy.nb_proveedor}}</td>
+					<td>{{buy.nb_producto}}</td>
+					<td>{{buy.fec_compra | date:"fullDate"}}</td>
+					<td>{{buy.num_precio}}</td>
+					<td>{{buy.num_cantidad}}</td>
+					<td>{{buy.num_total}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="col-md-12">
+		<div class="text-center col-md-12">
+      		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+       </div>
+		<div class="col-md-5 buttons">
+			<div class="col-md-3 BtnContent">
+				<button class="btn btn-warning" ng-click="redirectEdi(buysService.selectedBuy)">Editar</button>
+			</div>
+			<div class="col-md-3 BtnContent">
+				<button class="btn btn-danger" ng-click="deleteBuy(UsersService.selectedUser)" >Eliminar</button>
+			</div>
+		</div>
+		
+	</div>

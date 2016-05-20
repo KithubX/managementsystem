@@ -2,17 +2,17 @@
 	<cc-spinner is-loading="UsersService.isLoading" message="Loading"></cc-spinner>
 	<div class="UsersContainer" ng-if="!UsersService.isLoading">
 		<div class="col-md-12 Filtros pleft">
-	    <div class="row">
-	        <div class="col-xs-4">
-	      <label for="search">Búsqueda:</label>
-	      <input ng-model="q" id="search" class="form-control" placeholder="Filtrado">
-	    </div>
-	    <div class="col-xs-2">
-	      <label for="search">Usuarios Por Página:</label>
-	      <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
-	    </div>
-	    </div><!-- row -->
-	</div><!-- filtros -->
+		    <div class="row">
+		        <div class="col-xs-4">
+		      <label for="search">Búsqueda:</label>
+		      <input ng-model="q" id="search" class="form-control" placeholder="Filtrado">
+		    </div>
+		    <div class="col-xs-2">
+		      <label for="search">Usuarios Por Página:</label>
+		      <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+		    </div>
+		    </div><!-- row -->
+		</div><!-- filtros -->
 	<table class="table table-striped">
 		<thead>
 			<tr>

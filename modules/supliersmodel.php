@@ -163,6 +163,21 @@
 			return $datos;
 		}
 
+		function EditBuy($params)
+		{
+			$userModel = new UsersModel();
+			// Creando el objeto de la tabla y asignando las propiedades
+			$buyEdit = R::load("compras",$params['id_compra']);
+			$buyEdit->id_producto  = $params['id_producto'];
+			$buyEdit->num_cantidad = $params['num_cantidad'];
+			$buyEdit->num_total    = $params['num_total'];
+			$buyEdit->fec_compra   = $params['fec_compra'];
+			$buyEdit->id_proveedor = $params['id_proveedor'];
+			$buyEdit->desc_compra  = $params['desc_compra'];
+			$datos = $userModel->StoreObject($buyEdit);
+			return $datos;
+		}
+
 		function findBuyById($id)
 		{
 			$consultar = new Consultar();

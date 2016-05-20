@@ -110,7 +110,7 @@
 		$id_user    = $_SESSION['id_user'];
 		$params['id_usuario'] = $id_user;
 		$model     			  = new SupliersModel();
-		$buy  			  = $model->RegisterBuy($params);
+		$buy  			      = $model->RegisterBuy($params);
 		return $buy;
 	}
 
@@ -118,6 +118,13 @@
 	{
 		$model    = new SupliersModel();
 		$buy      = $model->findBuyById($id);
+		return $buy;
+	}
+
+	function EditBuy($params)
+	{
+		$model     			  = new SupliersModel();
+		$buy  			      = $model->EditBuy($params);
 		return $buy;
 	}
  ?>

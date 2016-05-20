@@ -546,6 +546,27 @@
         $app->response->body(json_encode($datos));
     });
 
+    $app->put("/EditBuy/", function() use($app){
+        $product = $app->request->put();
+        // Registrando al producto
+        $data   = EditBuy($product);
+       $error          = $data['error'];
+        $app->response->headers->set("Content-type","application/json");
+        $app->response->setStatus(200);
+        if($error==1)
+        {
+            $datos = $data['mensaje'];
+            $datos = array("info"=>0,"error"=>1,"mensaje"=>$data["mensaje"]);
+
+        }
+        else
+        {
+            $datos = array("info"=>$data["info"],"error"=>0,"mensaje"=>"ok");
+        }
+        
+        $app->response->body(json_encode($datos));
+    });
+
      $app->get('/findBuyById/', function() use($app) 
     {   
             $params    = $app->request->get();
