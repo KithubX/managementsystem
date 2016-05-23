@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module("app",['ui.router','toaster','ngAnimate','angularSpinner',
 	'jcs-autoValidate','ngBootbox','angularUtils.directives.dirPagination','ui.bootstrap',
-	'appProveedores']);
+	'appProveedores','ngCookies']);
 
 app.directive("ccSomething",function(){
 	return{
