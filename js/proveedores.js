@@ -7,7 +7,7 @@ app.filter('PriceFilter',function(){
 	}
 });
 
-app.service("buysService",function($http,$state,$ngBootbox,toaster){
+app.service("buysService",function($http,$state,$ngBootbox,toaster,$cookies){
 	var self = {
 		"isLoading":false,
 		"ordering":"-fec_compra",
@@ -123,8 +123,10 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 			{
 				if(dates.start!=null && dates.end!= null)
 				{
-					self.dateStart = dates.start.toISOString().slice(0,10).replace(/-/g,"-")
-					self.dateEnd   = dates.end.toISOString().slice(0,10).replace(/-/g,"-")
+					$cookies.put("dateStart",dates.start.toISOString().slice(0,10).replace(/-/g,"-"));
+					$cookies.put("dateEnd",dates.end.toISOString().slice(0,10).replace(/-/g,"-"));
+					self.dateStart = $cookies.get("dateStart");
+					self.dateEnd   = $cookies.get("dateEnd");
 					if(!self.isLoading)
 					{
 						self.isLoading = true;
@@ -136,6 +138,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster){
 						 			self.isLoading = false;
 						   			if(Data.info.length>0)
 						   			{
+						   				$cookies.put("buys",JSON.stringify(Data.info));
 						   				self.buys = Data.info;
 						   				$state.go("buysDetail.buysTables");
 						   			}else{toaster.pop('error',"No hay compras en ese rango de fechas");}
@@ -613,8 +616,16 @@ app.controller("productsController",function($scope,$http,toaster,buysService,$s
 	  }
 });
 
-app.controller("buysDetailController",function($scope,$http,toaster,buysService,$state){
+app.controller("buysDetailController",function($scope,$http,toaster,buysService,$state,$cookies){
 	$scope.buysService = buysService;
+	var cookiesbuys    = JSON.parse($cookies.get("buys"));
+	if(cookiesbuys.length>0)
+	{
+		$scope.buysService.buys      = cookiesbuys;
+		$scope.buysService.dateStart = $cookies.get("dateStart");
+		$scope.buysService.dateEnd   = $cookies.get("dateEnd");
+	}	
+
 	$scope.GoCompras = function()
 	{
 		$state.go("buys");
@@ -627,6 +638,7 @@ app.controller("buysDetailController",function($scope,$http,toaster,buysService,
 			$state.go("buysDetail.buysTables");
 		}else{$state.go("buysDetail.buysFrames");}
 	}
+
 
 });
 

@@ -44,6 +44,7 @@
     <script src="js/main.js"></script>
     <script src="js/proveedores.js"></script>
     <script src="js/angular-locale_es-mx.js"></script>
+    <script src="js/angular-cookies.js"></script>
 </head>
 
 <body>
