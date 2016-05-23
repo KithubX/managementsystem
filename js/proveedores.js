@@ -10,7 +10,7 @@ app.filter('PriceFilter',function(){
 app.service("buysService",function($http,$state,$ngBootbox,toaster){
 	var self = {
 		"isLoading":false,
-		"ordering":"fec_compra",
+		"ordering":"-fec_compra",
 		"buys":[],
 		"error":false,
 		"search":null,
@@ -620,6 +620,13 @@ app.controller("buysDetailController",function($scope,$http,toaster,buysService,
 		$state.go("buys");
 	}
 
+	$scope.SelectView = function(view)
+	{
+		if(view=="list")
+		{
+			$state.go("buysDetail.buysTables");
+		}else{$state.go("buysDetail.buysFrames");}
+	}
 
 });
 

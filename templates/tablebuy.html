@@ -17,10 +17,28 @@
 				<tr>
 					<th class="text-center"><i class="fa fa-industry"></i> Empresa</th>
 					<th class="text-center"><i class="fa fa-product-hunt"></i> Producto</th>
-					<th class="text-center"><i class="fa fa-calendar"></i> Fecha</th>
-					<th class="text-center"><i class="fa fa-dollar"></i> Precio</th>
+					<th class="text-center"><i class="fa fa-calendar"></i>
+						 Fecha 
+						 <div class="sortables">
+							<span class="fa fa-sort-asc" ng-click="buysService.ordering= 'fec_compra'" ng-style="{'cursor':'pointer'}"></span>
+	                        <span class="fa fa-sort-desc" ng-click="buysService.ordering='-fec_compra'" ng-style="{'cursor':'pointer'}"></span>
+						</div>
+					</th>
+					<th class="text-center"><i class="fa fa-dollar"></i>
+						 Precio
+						 <div class="sortables">
+							<span class="fa fa-sort-asc" ng-click="buysService.ordering= 'num_precio'" ng-style="{'cursor':'pointer'}"></span>
+	                        <span class="fa fa-sort-desc" ng-click="buysService.ordering='-num_precio'" ng-style="{'cursor':'pointer'}"></span>
+						</div>
+					</th>
 					<th class="text-center"><i class="fa fa-sort-amount-asc"> Cantidad</th>
-					<th class="text-center"><i class="fa fa-money"></i> Total</th>
+					<th class="text-center"><i class="fa fa-money"></i> 
+						Total
+						<div class="sortables">
+							<span class="fa fa-sort-asc" ng-click="buysService.ordering= 'num_total'" ng-style="{'cursor':'pointer'}"></span>
+	                        <span class="fa fa-sort-desc" ng-click="buysService.ordering='-num_total'" ng-style="{'cursor':'pointer'}"></span>
+						</div>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -43,7 +61,7 @@
        </div>
 		<div class="col-md-5 buttons">
 			<div class="col-md-3 BtnContent">
-				<button class="btn btn-warning" ng-click="redirectEdi(buysService.selectedBuy)">Editar</button>
+				<button class="btn btn-warning" ng-click="redirectEdit(buysService.selectedBuy)">Editar</button>
 			</div>
 			<div class="col-md-3 BtnContent">
 				<button class="btn btn-danger" ng-click="deleteBuy(UsersService.selectedUser)" >Eliminar</button>

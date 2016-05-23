@@ -3,6 +3,12 @@
 	<div class="row">
 		<h2 class="text-center">Detalles de compra</h2>
 		<p class="lead text-center">En este apartado encontrará de forma detallada las compras efectuadas en el rango de fecha especificado</p>
+		<div class="btn-group PresentationBtns col-md-12" role="group" aria-label="...">
+		  <h4 class="text-center">Presentaciones de información</h4>
+		  <button type="button" class="btn btn-default" ng-click="SelectView('frames')">Mosaicos</button>
+		  <button type="button" class="btn btn-default" ng-click="SelectView('list')">Lista</button>
+		</div>
+
 		 <ui-view></ui-view>  
 		
 	</div><!-- /.row -->
