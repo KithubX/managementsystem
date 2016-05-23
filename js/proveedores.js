@@ -22,6 +22,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster,$cookies){
 		"dateStart":null,
 		"dateEnd":null,
 		"selectedBuy":null,
+		"screenType":null,
 		"goBuys":function(){
 			$state.go("buys");
 		},
@@ -140,7 +141,7 @@ app.service("buysService",function($http,$state,$ngBootbox,toaster,$cookies){
 						   			{
 						   				$cookies.put("buys",JSON.stringify(Data.info));
 						   				self.buys = Data.info;
-						   				$state.go("buysDetail.buysTables");
+						   				$state.go("buysDetail.buysTables",{type:1});
 						   			}else{toaster.pop('error',"No hay compras en ese rango de fechas");}
 						   		}else{
 						   			self.error     = true;
@@ -616,9 +617,10 @@ app.controller("productsController",function($scope,$http,toaster,buysService,$s
 	  }
 });
 
-app.controller("buysDetailController",function($scope,$http,toaster,buysService,$state,$cookies){
-	$scope.buysService = buysService;
-	var cookiesbuys    = JSON.parse($cookies.get("buys"));
+app.controller("buysDetailController",function($scope,$http,toaster,buysService,$state,$cookies,$stateParams){
+	$scope.buysService 			  	 = buysService;
+	$scope.buysService.screenType 	 = $stateParams.type;
+	var cookiesbuys   				 = JSON.parse($cookies.get("buys"));
 	if(cookiesbuys.length>0)
 	{
 		$scope.buysService.buys      = cookiesbuys;
@@ -635,8 +637,8 @@ app.controller("buysDetailController",function($scope,$http,toaster,buysService,
 	{
 		if(view=="list")
 		{
-			$state.go("buysDetail.buysTables");
-		}else{$state.go("buysDetail.buysFrames");}
+			$state.go("buysDetail.buysTables",{type:1});
+		}else{$state.go("buysDetail.buysFrames",{type:2});}
 	}
 
 

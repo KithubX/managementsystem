@@ -398,12 +398,12 @@ app.config(function($stateProvider,$urlRouterProvider){
 		controller:'buysDetailController'	
 	})
 	.state('buysDetail.buysFrames',{
-		url:'/buysFrames',
+		url:'/buysFrames/:type',
 		templateUrl:'templates/buysframes.html',
 		controller:'buysDetailController'
 	})
 	.state('buysDetail.buysTables',{
-		url:'/buysTables',
+		url:'/buysTables/:type',
 		templateUrl:'templates/buytables.html',
 		controller:'buysDetailController'
 	})
